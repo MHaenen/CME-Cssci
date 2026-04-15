@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Auditor: The Content Moderator</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===== SCREEN: LANDING ===== -->
+  <div id="screen-landing" class="screen active">
+    <div class="landing-bg"></div>
+    <div class="landing-content">
+      <div class="badge">CLASSIFIED SYSTEM ACCESS</div>
+      <h1 class="title-main">AI <span class="accent">AUDITOR</span></h1>
+      <h2 class="title-sub">The Content Moderator</h2>
+      <p class="landing-desc">
+        You are an <strong>AI Auditing System</strong>. Review flagged content, expose algorithmic bias,
+        and ensure ethical moderation across the platform. Every decision shapes the future of AI.
+      </p>
+      <div class="landing-stats">
+        <div class="stat-box"><span class="stat-num">4</span><span class="stat-label">Case Levels</span></div>
+        <div class="stat-box"><span class="stat-num">3</span><span class="stat-label">Audit Tools</span></div>
+        <div class="stat-box"><span class="stat-num">100</span><span class="stat-label">Max Score</span></div>
+      </div>
+      <button class="btn btn-primary btn-large" onclick="Game.startTutorial()">▶ BEGIN AUDIT</button>
+      <button class="btn btn-ghost" onclick="Game.showInstructions()">HOW TO PLAY</button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: INSTRUCTIONS ===== -->
+  <div id="screen-instructions" class="screen">
+    <div class="screen-inner">
+      <h2 class="screen-title"><span class="accent">AUDITOR</span> BRIEFING</h2>
+      <div class="instructions-grid">
+        <div class="instr-card">
+          <div class="instr-icon">🔍</div>
+          <h3>Review Flagged Content</h3>
+          <p>Each level presents a post flagged by the AI moderation system. Read the full context carefully.</p>
+        </div>
+        <div class="instr-card">
+          <div class="instr-icon">⚖️</div>
+          <h3>Use Your Audit Tools</h3>
+          <p>Access the Content Analyzer, Ethical Guidelines, and AI Reasoning to inform your decision.</p>
+        </div>
+        <div class="instr-card">
+          <div class="instr-icon">⏱️</div>
+          <h3>Decide Under Pressure</h3>
+          <p>A timer runs for each case. Faster ethical decisions earn efficiency bonuses.</p>
+        </div>
+        <div class="instr-card">
+          <div class="instr-icon">📊</div>
+          <h3>Scoring</h3>
+          <p><strong>Ethical Score</strong> — correctness of your decision<br/>
+             <strong>Audit Efficiency</strong> — speed of your decision<br/>
+             <strong>Final Report</strong> — full audit summary at the end</p>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="Game.startTutorial()">START TUTORIAL</button>
+      <button class="btn btn-ghost" onclick="Game.showScreen('landing')">← BACK</button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: TUTORIAL ===== -->
+  <div id="screen-tutorial" class="screen">
+    <div class="screen-inner">
+      <div class="level-header">
+        <span class="level-badge tutorial">TUTORIAL</span>
+        <h2>Welcome, Auditor</h2>
+      </div>
+      <div class="tutorial-steps" id="tutorial-steps">
+        <div class="tut-step active" data-step="0">
+          <div class="tut-icon">🤖</div>
+          <h3>Your Mission</h3>
+          <p>You are plugged into <strong>ModAI v2.3</strong> — an AI content moderation system used by a major social platform. Your job is to <em>audit its decisions</em> for fairness, bias, and ethical correctness.</p>
+          <button class="btn btn-primary" onclick="Game.tutorialNext(1)">NEXT →</button>
+        </div>
+        <div class="tut-step" data-step="1">
+          <div class="tut-icon">🚩</div>
+          <h3>How Flagging Works</h3>
+          <p>ModAI continuously scans posts. When it detects a potential violation, it <strong>flags</strong> the content and assigns a violation category. You review these flags and decide if the AI was right or wrong.</p>
+          <button class="btn btn-primary" onclick="Game.tutorialNext(2)">NEXT →</button>
+          <button class="btn btn-ghost" onclick="Game.tutorialNext(0)">← BACK</button>
+        </div>
+        <div class="tut-step" data-step="2">
+          <div class="tut-icon">🧰</div>
+          <h3>Your Audit Tools</h3>
+          <div class="tool-preview-grid">
+            <div class="tool-chip" id="tut-tool-1">📊 Content Analyzer</div>
+            <div class="tool-chip" id="tut-tool-2">📜 Ethical Guidelines</div>
+            <div class="tool-chip" id="tut-tool-3">🤖 AI Reasoning</div>
+          </div>
+          <p>Click each tool during a case to get more context before deciding.</p>
+          <button class="btn btn-primary" onclick="Game.tutorialNext(3)">NEXT →</button>
+          <button class="btn btn-ghost" onclick="Game.tutorialNext(1)">← BACK</button>
+        </div>
+        <div class="tut-step" data-step="3">
+          <div class="tut-icon">✅</div>
+          <h3>Practice Decision</h3>
+          <div class="case-card">
+            <div class="case-meta">
+              <span class="flag-badge">FLAGGED: Spam</span>
+              <span class="platform-badge">Platform: SocialNet</span>
+            </div>
+            <div class="case-content">"BUY CHEAP SUNGLASSES!!! CLICK HERE NOW!!! 50% OFF LIMITED TIME!!!"</div>
+          </div>
+          <p>The AI flagged this as <strong>spam</strong>. Do you agree?</p>
+          <div class="decision-buttons">
+            <button class="btn btn-approve" onclick="Game.tutorialDecision('approve')">✅ APPROVE REMOVAL</button>
+            <button class="btn btn-reject" onclick="Game.tutorialDecision('reject')">❌ REJECT FLAG</button>
+          </div>
+        </div>
+        <div class="tut-step" data-step="4">
+          <div class="tut-icon">🎯</div>
+          <h3>Correct! You're Ready.</h3>
+          <p>That was clearly spam — a correct approval of the AI's flag. Real cases won't be that easy. Context, culture, and ethics all matter.</p>
+          <p>You'll face <strong>4 challenging levels</strong> with increasing complexity.</p>
+          <button class="btn btn-primary btn-large" onclick="Game.startLevel(0)">BEGIN CASE 1 →</button>
+        </div>
+        <div class="tut-step" data-step="4b">
+          <div class="tut-icon">🤔</div>
+          <h3>Think Again</h3>
+          <p>That content is clearly promotional spam with no editorial value. The AI's flag was <strong>correct</strong> here — approve the removal.</p>
+          <div class="decision-buttons">
+            <button class="btn btn-approve" onclick="Game.tutorialDecision('approve')">✅ APPROVE REMOVAL</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: GAME (reused for all levels) ===== -->
+  <div id="screen-game" class="screen">
+    <div class="game-layout">
+
+      <!-- TOP HUD -->
+      <div class="hud">
+        <div class="hud-left">
+          <span class="hud-level" id="hud-level">CASE 1</span>
+          <span class="hud-title" id="hud-title">Offensive Language</span>
+          <div class="hud-progress" id="hud-progress">
+            <span class="prog-dot" data-idx="0"></span>
+            <span class="prog-dot" data-idx="1"></span>
+            <span class="prog-dot" data-idx="2"></span>
+            <span class="prog-dot" data-idx="3"></span>
+          </div>
+        </div>
+        <div class="hud-center">
+          <div class="timer-ring" id="timer-ring">
+            <svg viewBox="0 0 60 60">
+              <circle cx="30" cy="30" r="26" class="timer-bg"/>
+              <circle cx="30" cy="30" r="26" class="timer-fill" id="timer-circle"/>
+            </svg>
+            <span id="timer-display">60</span>
+          </div>
+        </div>
+        <div class="hud-right">
+          <div class="score-pill">⚖️ <span id="hud-ethical">0</span></div>
+          <div class="score-pill">⚡ <span id="hud-efficiency">0</span></div>
+        </div>
+      </div>
+
+      <!-- MAIN GAME AREA -->
+      <div class="game-main">
+
+        <!-- LEFT: Case Info -->
+        <div class="case-panel">
+          <div class="case-header">
+            <span class="flag-badge" id="case-flag">FLAGGED: Hate Speech</span>
+            <span class="platform-badge" id="case-platform">Platform: SocialNet</span>
+          </div>
+          <div class="case-scenario" id="case-scenario"></div>
+          <div class="case-card elevated">
+            <div class="case-label">FLAGGED CONTENT</div>
+            <div class="case-content" id="case-content"></div>
+          </div>
+          <div class="case-ai-decision">
+            <span class="ai-label">🤖 ModAI Decision:</span>
+            <span class="ai-verdict" id="case-ai-verdict"></span>
+          </div>
+        </div>
+
+        <!-- RIGHT: Tools + Decision -->
+        <div class="action-panel">
+          <div class="tools-section">
+            <h3 class="tools-title">🧰 AUDIT TOOLS</h3>
+            <div class="tools-grid">
+              <button class="tool-btn" id="tool-analyzer" onclick="Game.useTool('analyzer')">
+                <span class="tool-icon">📊</span>
+                <span class="tool-name">Content Analyzer</span>
+              </button>
+              <button class="tool-btn" id="tool-ethics" onclick="Game.useTool('ethics')">
+                <span class="tool-icon">📜</span>
+                <span class="tool-name">Ethical Guidelines</span>
+              </button>
+              <button class="tool-btn" id="tool-ai" onclick="Game.useTool('ai')">
+                <span class="tool-icon">🤖</span>
+                <span class="tool-name">AI Reasoning</span>
+              </button>
+            </div>
+            <div class="tool-output" id="tool-output">
+              <div class="tool-placeholder">← Click a tool to inspect the case</div>
+            </div>
+          </div>
+
+          <div class="decision-section">
+            <h3 class="decision-title">YOUR VERDICT</h3>
+            <div class="decision-buttons" id="decision-buttons">
+              <!-- Populated by JS -->
+            </div>
+            <div class="kb-hint">Press <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> to decide &nbsp;·&nbsp; <kbd>Q</kbd> <kbd>W</kbd> <kbd>E</kbd> for tools</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: FEEDBACK ===== -->
+  <div id="screen-feedback" class="screen">
+    <div class="screen-inner feedback-inner">
+      <div class="feedback-header">
+        <div class="feedback-result-icon" id="feedback-icon">✅</div>
+        <h2 id="feedback-headline">Correct Decision</h2>
+        <p id="feedback-subline">You identified the AI's error</p>
+      </div>
+
+      <div class="feedback-scores">
+        <div class="score-card">
+          <div class="score-label">⚖️ Ethical Score</div>
+          <div class="score-bar-wrap">
+            <div class="score-bar" id="fb-ethical-bar"></div>
+          </div>
+          <div class="score-value" id="fb-ethical-val">0%</div>
+        </div>
+        <div class="score-card">
+          <div class="score-label">⚡ Audit Efficiency</div>
+          <div class="score-bar-wrap">
+            <div class="score-bar" id="fb-efficiency-bar"></div>
+          </div>
+          <div class="score-value" id="fb-efficiency-val">0%</div>
+        </div>
+      </div>
+
+      <div class="feedback-body">
+        <div class="fb-section">
+          <h4>📋 Case Analysis</h4>
+          <p id="fb-analysis"></p>
+        </div>
+        <div class="fb-section">
+          <h4>🤖 AI System Failure</h4>
+          <p id="fb-ai-failure"></p>
+        </div>
+        <div class="fb-section">
+          <h4>💡 Ethical Principle</h4>
+          <p id="fb-principle"></p>
+        </div>
+      </div>
+
+      <div class="fb-comparison">
+        <div class="comparison-box">
+          <div class="comp-label">YOUR DECISION</div>
+          <div class="comp-value" id="fb-user-decision"></div>
+        </div>
+        <div class="vs-divider">VS</div>
+        <div class="comparison-box ai">
+          <div class="comp-label">ModAI DECISION</div>
+          <div class="comp-value" id="fb-ai-decision"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-large" id="fb-next-btn" onclick="Game.nextLevel()">NEXT CASE →</button>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: FINAL REPORT ===== -->
+  <div id="screen-final" class="screen">
+    <div class="screen-inner">
+      <div class="final-header">
+        <div class="badge">AUDIT COMPLETE</div>
+        <h2>AI Audit <span class="accent">Report</span></h2>
+        <p>ModAI v2.3 — Full Performance Assessment</p>
+      </div>
+
+      <div class="final-score-ring">
+        <svg viewBox="0 0 140 140">
+          <circle cx="70" cy="70" r="60" class="ring-bg"/>
+          <circle cx="70" cy="70" r="60" class="ring-fill" id="final-ring-circle"/>
+        </svg>
+        <div class="final-score-inner">
+          <span id="final-score-val">0</span>
+          <span class="final-score-label">OVERALL</span>
+        </div>
+      </div>
+
+      <div class="final-breakdown" id="final-breakdown">
+        <!-- Level rows injected by JS -->
+      </div>
+
+      <div class="final-verdict" id="final-verdict"></div>
+
+      <div class="final-biases" id="final-biases">
+        <h3>🔎 Biases Detected in ModAI</h3>
+        <!-- Injected by JS -->
+      </div>
+
+      <div class="final-actions">
+        <button class="btn btn-primary btn-large" onclick="Game.restart()">🔄 AUDIT AGAIN</button>
+        <button class="btn btn-ghost" onclick="Game.showScreen('landing')">🏠 MAIN MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: Tool Output ===== -->
+  <div id="modal-overlay" class="modal-overlay hidden" onclick="Game.closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="Game.closeModal()">✕</button>
+      <h3 id="modal-title">Tool Output</h3>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Level Intro Overlay -->
+  <div id="level-intro-overlay" class="level-intro hidden">
+    <div class="level-intro-inner">
+      <div class="li-label" id="li-label">CASE 1 OF 4</div>
+      <h2 class="li-title" id="li-title">Offensive Language Moderation</h2>
+      <div class="li-countdown" id="li-countdown">3</div>
+      <p class="li-hint">Read carefully. Use your audit tools. Decide wisely.</p>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <script src="js/scenarios.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
