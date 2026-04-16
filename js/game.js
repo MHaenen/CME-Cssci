@@ -102,6 +102,16 @@ const Game = (() => {
     document.getElementById('case-content').textContent = scenario.content;
     document.getElementById('case-ai-verdict').textContent = scenario.aiDecision;
 
+    // Visual (image / video / post mock)
+    const visualEl = document.getElementById('case-visual');
+    if (scenario.visual) {
+      visualEl.innerHTML = scenario.visual;
+      visualEl.style.display = 'block';
+    } else {
+      visualEl.innerHTML = '';
+      visualEl.style.display = 'none';
+    }
+
     // Reset tool output + checkmarks
     document.getElementById('tool-output').innerHTML =
       '<div class="tool-placeholder">← Click a tool to inspect the case</div>';
@@ -378,13 +388,84 @@ const Game = (() => {
     }, 200);
 
     // Next button text
-    const isLast = state.currentLevel >= SCENARIOS.length - 1;
     const nextBtn = document.getElementById('fb-next-btn');
-    nextBtn.textContent = isLast ? '📊 VIEW FINAL REPORT' : 'NEXT CASE →';
+    nextBtn.textContent = 'CONTINUE →';
   }
 
   function nextLevel() {
-    const nextIdx = state.currentLevel + 1;
+    showLevelMap();
+  }
+
+  // ── Level Map ────────────────────────────────────────────────────────────────
+  const LEVEL_ICONS = ['💬', '🎭', '📰', '🔒', '🎬'];
+
+  function showLevelMap() {
+    const nextIdx = state.scores.length;
+    const isAllDone = nextIdx >= SCENARIOS.length;
+
+    const path = document.getElementById('levelmap-path');
+    path.innerHTML = '';
+
+    SCENARIOS.forEach((sc, i) => {
+      if (i > 0) {
+        const conn = document.createElement('div');
+        conn.className = 'lm-connector' + (i <= state.scores.length ? ' done' : '');
+        path.appendChild(conn);
+      }
+
+      const isCompleted = i < state.scores.length;
+      const isCurrent = i === nextIdx;
+      const isLocked = i > nextIdx;
+      const score = isCompleted ? state.scores[i] : null;
+
+      let nodeClass = 'lm-node';
+      if (isCurrent) nodeClass += ' current';
+      else if (isCompleted) nodeClass += score.correct ? ' done-correct' : ' done-wrong';
+      else if (isLocked) nodeClass += ' locked';
+
+      const node = document.createElement('div');
+      node.className = nodeClass;
+
+      let badgeHTML = '';
+      if (isCompleted) {
+        const cls = score.correct ? 'correct' : 'wrong';
+        const txt = score.correct ? '✓' : '✗';
+        badgeHTML = `<div class="lm-result-badge ${cls}">${txt}</div>`;
+      }
+
+      let chipHTML = '';
+      if (isCompleted) {
+        const rowScore = Math.round((score.ethical + score.efficiency) / 2);
+        chipHTML = `<div class="lm-score-chip">${rowScore}%</div>`;
+      } else if (isCurrent) {
+        chipHTML = `<div class="lm-score-chip" style="color:var(--accent);border-color:var(--accent)">NEXT</div>`;
+      }
+
+      node.innerHTML = `
+        <div class="lm-circle">
+          ${badgeHTML}
+          <div class="lm-icon">${LEVEL_ICONS[i]}</div>
+          <div class="lm-num">${sc.caseLabel}</div>
+        </div>
+        <div class="lm-label">${sc.title}</div>
+        ${chipHTML}
+      `;
+
+      path.appendChild(node);
+    });
+
+    const btn = document.getElementById('levelmap-btn');
+    if (isAllDone) {
+      btn.textContent = '📊 VIEW FINAL REPORT';
+    } else {
+      btn.textContent = `START ${SCENARIOS[nextIdx].caseLabel} →`;
+    }
+
+    showScreen('levelmap');
+  }
+
+  function startNextCase() {
+    const nextIdx = state.scores.length;
     if (nextIdx >= SCENARIOS.length) {
       showFinalReport();
     } else {
@@ -460,7 +541,7 @@ const Game = (() => {
     document.getElementById('fb-ethical-bar').style.width = '0%';
     document.getElementById('fb-efficiency-bar').style.width = '0%';
     document.getElementById('final-ring-circle').style.strokeDashoffset = 377;
-    startLevel(0);
+    showLevelMap();
   }
 
   // ── Public API ─────────────────────────────────────────────────────────────
@@ -476,7 +557,9 @@ const Game = (() => {
     closeModal,
     nextLevel,
     restart,
-    showToast
+    showToast,
+    showLevelMap,
+    startNextCase
   };
 })();
 

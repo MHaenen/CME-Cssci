@@ -8,35 +8,28 @@ const SCENARIOS = [
     platform: "Platform: PolitiNet",
     flagReason: "FLAGGED: Offensive Language",
     timeLimit: 75,
-    scenario: `A user posted a comment during a heated political debate online. The AI system flagged it under its "Offensive Language" policy, citing the use of aggressive terminology. Review the context before making your decision.`,
+    scenario: `A political comment was flagged under "Offensive Language" for using words like "criminal" and "corrupt." Does the context justify removal?`,
     content: `"This administration's economic policy is absolutely criminal. These politicians are destroying the middle class with their greedy, corrupt decisions — they should be ashamed of themselves and held accountable!"`,
-    aiDecision: `ModAI flagged this post and recommended removal. Confidence: 82%. Trigger: keywords "criminal," "greedy," "corrupt" matched the offensive language classifier. No context weighting applied.`,
+    aiDecision: `Flagged for removal. Confidence: 82%. Trigger: keywords "criminal," "greedy," "corrupt" — no context weighting applied.`,
     tools: {
       analyzer: {
         title: "📊 Content Analyzer",
         body: `<strong>Sentiment:</strong> Highly negative (anger)<br/><br/>
-<strong>Keywords flagged:</strong> "criminal", "corrupt", "destroying", "greedy"<br/><br/>
+<strong>Flagged keywords:</strong> "criminal", "corrupt", "destroying", "greedy"<br/><br/>
 <strong>Target:</strong> Politicians / Government (public figures)<br/><br/>
-<strong>Context signals:</strong> Political commentary thread; 847 similar posts in this thread<br/><br/>
-<strong>AI Confidence:</strong> 82% — based on keyword match only, no semantic understanding<br/><br/>
-<strong>Note:</strong> No profanity, slurs, or incitement to violence detected.`
+<strong>AI Confidence:</strong> 82% — keyword match only, no semantic understanding<br/><br/>
+<strong>No profanity, slurs, or incitement detected.</strong>`
       },
       ethics: {
         title: "📜 Ethical Guidelines",
-        body: `<strong>Freedom of Expression Principle:</strong> Political speech, especially criticism of public figures and government policy, enjoys the highest level of protection under free expression norms.<br/><br/>
-<strong>Harm Prevention Threshold:</strong> Content should only be removed if it poses a clear, direct threat of harm or constitutes targeted harassment against individuals. General political criticism does not meet this threshold.<br/><br/>
-<strong>Public Figure Doctrine:</strong> Politicians and public institutions are subject to robust public criticism. Calling policy "criminal" or "corrupt" is rhetorical hyperbole, not literal accusation.<br/><br/>
-<strong>Guideline §4.2:</strong> Aggressive tone ≠ violation. Tone alone is insufficient to justify removal.`
+        body: `<strong>Freedom of Expression:</strong> Political speech — especially criticism of public figures — enjoys the highest protection under free expression norms. Aggressive tone alone is not a violation.<br/><br/>
+<strong>Public Figure Doctrine:</strong> Calling policy "criminal" or "corrupt" is rhetorical hyperbole, not a literal accusation. Robust criticism of politicians is essential to democratic discourse.<br/><br/>
+<strong>Guideline §4.2:</strong> Aggressive tone ≠ violation.`
       },
       ai: {
         title: "🤖 ModAI Reasoning Log",
         body: `<strong>Model:</strong> KeywordClassifier v1.4 (no NLP context layer)<br/><br/>
-<strong>Process:</strong><br/>
-<ul><li>Tokenised input → matched against offensive word list</li>
-<li>Found 4 matches → triggered threshold (≥3 matches = flag)</li>
-<li>No analysis of intent, target type, or rhetorical context</li></ul>
-<strong>Known Bias:</strong> This model over-flags political speech by ~34% compared to human moderators. It lacks the ability to distinguish between personal attacks and political rhetoric.<br/><br/>
-<strong>Recommendation:</strong> Model requires contextual NLP upgrade.`
+<strong>Process:</strong><ul><li>4 keyword matches found → flag triggered (threshold: ≥3)</li><li>No analysis of intent, target type, or rhetorical context</li></ul><strong>Known Bias:</strong> Over-flags political speech by ~34% vs human moderators — cannot distinguish personal attacks from political rhetoric.`
       }
     },
     options: [
@@ -55,9 +48,9 @@ const SCENARIOS = [
         ethicalScore: 92,
         userDecisionLabel: "Rejected Flag — Post Allowed",
         aiDecisionLabel: "Approved Removal (Incorrect)",
-        analysis: `This post is a clear example of political commentary. The language is forceful and critical, but it targets government policy and public figures — not private individuals. This type of speech is foundational to democratic discourse. The AI made a significant error by treating rhetorical intensity as a violation.`,
-        aiFailure: `ModAI used a simplistic keyword-matching algorithm (KeywordClassifier v1.4) with zero semantic understanding. Words like "criminal" and "corrupt" triggered the flag without any analysis of whether they described literal crimes or rhetorical frustration. This is a textbook example of an AI over-moderating political speech.`,
-        principle: `The "Public Figure Doctrine" protects strong criticism of politicians and governments. Democratic societies require citizens to be able to challenge authority vigorously, even aggressively. Removing this post would constitute a form of political censorship.`
+        analysis: `Political commentary targeting public figures, not private individuals — the language is forceful but contains no slurs or threats. The AI incorrectly treated rhetorical intensity as a policy violation.`,
+        aiFailure: `KeywordClassifier v1.4 matched "criminal" and "corrupt" with zero semantic understanding — a textbook case of AI over-moderation of political speech.`,
+        principle: `The Public Figure Doctrine protects strong criticism of politicians. Democratic societies require the right to challenge authority vigorously.`
       },
       approve_removal: {
         correct: false,
@@ -67,9 +60,9 @@ const SCENARIOS = [
         ethicalScore: 28,
         userDecisionLabel: "Approved Removal",
         aiDecisionLabel: "Approved Removal (Also Incorrect)",
-        analysis: `This post targets government policy and politicians — public figures who are legitimately subject to sharp criticism. The language is heated but contains no slurs, threats, or targeted harassment. Removing it silences valid democratic discourse.`,
-        aiFailure: `By agreeing with ModAI, you reinforced a biased algorithm that systematically over-flags political speech. You had access to tools that revealed the AI's keyword-only approach — a deeper review would have shown this removal was unjustified.`,
-        principle: `Political speech is among the most protected forms of expression. Strong, even aggressive criticism of politicians and institutions is essential to a functioning democracy. This post should have been allowed.`
+        analysis: `This post targets government policy and politicians — public figures subject to sharp criticism. No slurs, threats, or harassment were present; removing it silences valid democratic discourse.`,
+        aiFailure: `By agreeing with ModAI you reinforced a biased algorithm. The tools clearly showed a keyword-only approach with no real analysis of context or intent.`,
+        principle: `Political speech is among the most protected forms of expression. Strong criticism of institutions is essential to democracy.`
       },
       challenge: {
         correct: false,
@@ -79,9 +72,9 @@ const SCENARIOS = [
         ethicalScore: 65,
         userDecisionLabel: "Challenged AI — Requested Review",
         aiDecisionLabel: "Approved Removal (Incorrect)",
-        analysis: `Challenging the AI shows good critical thinking, but this case had sufficient evidence for a clear decision. The Content Analyzer confirmed no slurs or threats, and the Ethical Guidelines explicitly cover this scenario. Escalating when a decision is clear reduces audit efficiency.`,
-        aiFailure: `ModAI's keyword classifier is flawed. However, the tools available to you provided enough context to make a definitive ruling without escalation.`,
-        principle: `Efficient auditing means making decisions when evidence is sufficient, not defaulting to escalation. Reserve challenges for genuinely ambiguous cases.`
+        analysis: `Good instinct, but the Content Analyzer confirmed no threats and the Ethical Guidelines explicitly cover this scenario — enough evidence for a direct decision.`,
+        aiFailure: `ModAI's keyword classifier is flawed, but the available tools provided enough context to rule definitively without escalating.`,
+        principle: `Reserve challenges for genuinely ambiguous cases — escalating when evidence is clear reduces audit efficiency.`
       }
     }
   },
@@ -95,41 +88,75 @@ const SCENARIOS = [
     platform: "Platform: MemeBoard",
     flagReason: "FLAGGED: Hate Speech",
     timeLimit: 80,
-    scenario: `A popular meme was flagged by the AI system after receiving 1,200 reports from users. The meme depicts a well-known elected official in an exaggerated cartoon style with a satirical caption. The AI classified it as hate speech due to the mocking nature and volume of reports. You must determine whether this is targeted hate speech or legitimate political satire.`,
+    scenario: `A satirical cartoon of a senator received 1,200 reports and was flagged as hate speech. Is this political satire or genuine hate speech?`,
     content: `[Image: Cartoon caricature of Senator James Holt with exaggerated features, holding a bag of money] Caption: "Senator Holt's new economic policy: Take from the poor, give to the yacht." — @PoliticalComics`,
-    aiDecision: `ModAI flagged this post: Hate Speech (Class 2). Confidence: 71%. Trigger: High report volume + "mockery of individual" classifier. Account history: @PoliticalComics has 47K followers, posts political cartoons exclusively.`,
+    aiDecision: `Flagged: Hate Speech (Class 2). Confidence: 71%. Trigger: high report volume + "mockery of individual" classifier.`,
+    visual: `<div class="meme-post-mock">
+  <div class="spm-header">
+    <div class="spm-avatar" style="background:linear-gradient(135deg,#ff6b35,#f7c59f)">PC</div>
+    <div class="spm-meta">
+      <span class="spm-name">PoliticalComics</span>
+      <span class="spm-handle">@PoliticalComics &middot; MemeBoard</span>
+    </div>
+  </div>
+  <div class="mpm-cartoon-frame">
+    <svg viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg" style="max-width:180px;height:auto;display:block;margin:0 auto">
+      <rect width="180" height="200" fill="#fdf8ee" rx="4"/>
+      <rect x="6" y="6" width="168" height="188" fill="none" stroke="#c8b89a" stroke-width="1" rx="2" stroke-dasharray="4,3"/>
+      <ellipse cx="90" cy="50" rx="34" ry="14" fill="#1a1a1a"/>
+      <ellipse cx="90" cy="72" rx="34" ry="40" fill="#f2b97a" stroke="#1a0f00" stroke-width="2"/>
+      <rect x="56" y="50" width="68" height="14" fill="#1a1a1a"/>
+      <ellipse cx="57" cy="74" rx="7" ry="10" fill="#e8a86e" stroke="#1a0f00" stroke-width="1.5"/>
+      <ellipse cx="123" cy="74" rx="7" ry="10" fill="#e8a86e" stroke="#1a0f00" stroke-width="1.5"/>
+      <ellipse cx="78" cy="70" rx="9" ry="6" fill="white" stroke="#1a0f00" stroke-width="1.5"/>
+      <ellipse cx="102" cy="70" rx="9" ry="6" fill="white" stroke="#1a0f00" stroke-width="1.5"/>
+      <circle cx="80" cy="71" r="4" fill="#1a0f00"/>
+      <circle cx="104" cy="71" r="4" fill="#1a0f00"/>
+      <line x1="69" y1="65" x2="87" y2="65" stroke="#1a0f00" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="93" y1="65" x2="111" y2="65" stroke="#1a0f00" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M69 59 Q78 54 87 58" stroke="#1a0f00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M93 57 Q102 53 111 57" stroke="#1a0f00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="90" cy="82" rx="11" ry="9" fill="#e8a06a" stroke="#1a0f00" stroke-width="1.5"/>
+      <circle cx="85" cy="84" r="3" fill="#d08050"/>
+      <circle cx="95" cy="84" r="3" fill="#d08050"/>
+      <path d="M73 99 Q90 114 107 99" stroke="#1a0f00" stroke-width="2.5" fill="#c06060" stroke-linecap="round"/>
+      <path d="M75 101 Q90 111 105 101 Q90 106 75 101" fill="#c06060"/>
+      <rect x="82" y="110" width="16" height="12" fill="#f2b97a" stroke="#1a0f00" stroke-width="1.5"/>
+      <rect x="50" y="120" width="80" height="72" rx="4" fill="#1e3a6e" stroke="#1a0f00" stroke-width="2"/>
+      <polygon points="90,120 66,134 70,192" fill="#f0ede8"/>
+      <polygon points="90,120 114,134 110,192" fill="#f0ede8"/>
+      <polygon points="86,126 94,126 97,160 90,168 83,160" fill="#cc1a00" stroke="#aa1000" stroke-width="1"/>
+      <rect x="24" y="124" width="28" height="14" rx="7" fill="#1e3a6e" stroke="#1a0f00" stroke-width="1.5" transform="rotate(25,38,131)"/>
+      <circle cx="22" cy="144" r="8" fill="#f2b97a" stroke="#1a0f00" stroke-width="1.5"/>
+      <rect x="128" y="124" width="28" height="14" rx="7" fill="#1e3a6e" stroke="#1a0f00" stroke-width="1.5" transform="rotate(-20,142,131)"/>
+      <circle cx="154" cy="152" r="18" fill="#f5c518" stroke="#1a0f00" stroke-width="2"/>
+      <path d="M144 135 Q154 126 164 135" stroke="#1a0f00" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <text x="154" y="158" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a0f00" font-family="Georgia,serif">$</text>
+      <rect x="10" y="174" width="114" height="20" rx="3" fill="white" stroke="#cc1a00" stroke-width="1.5"/>
+      <text x="67" y="188" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#1a0f00" font-family="Arial,sans-serif">Sen. James Holt (R)</text>
+    </svg>
+  </div>
+  <div class="mpm-caption">&ldquo;Senator Holt&rsquo;s new economic policy: Take from the poor, give to the yacht.&rdquo;</div>
+  <div class="spm-stats"><span>&#128172; 4.2K</span><span>&#128257; 12K</span><span>&#10084; 31K</span></div>
+  <div class="spm-flag-bar">&#128680; ModAI &mdash; Flagged: Hate Speech &middot; 1,200 reports &middot; Confidence: 71%</div>
+</div>`,
     tools: {
       analyzer: {
         title: "📊 Content Analyzer",
-        body: `<strong>Content Type:</strong> Meme / Political cartoon<br/><br/>
-<strong>Target:</strong> Named elected official (public figure — Senator)<br/><br/>
-<strong>Hateful elements check:</strong><br/>
-<ul><li>Slurs: None detected</li>
-<li>Incitement to violence: None detected</li>
-<li>Targeted harassment: No personal address</li>
-<li>Protected characteristics attacked: None</li></ul>
-<strong>Satirical markers:</strong> Exaggerated caricature style, policy critique, ironic caption structure<br/><br/>
-<strong>Report analysis:</strong> 1,200 reports — but 89% from accounts that recently followed Senator Holt's official page (coordinated reporting pattern detected)<br/><br/>
-<strong>Similar accounts:</strong> @PoliticalComics content matches pattern of established political satire publications.`
+        body: `<strong>Content Type:</strong> Political cartoon targeting an elected official<br/><br/>
+<strong>Hateful elements:</strong><ul><li>Slurs: None</li><li>Incitement: None</li><li>Protected characteristics attacked: None</li></ul><strong>Report analysis:</strong> 89% of 1,200 reports came from accounts that recently followed Senator Holt's page — coordinated campaign detected.<br/><br/>
+<strong>Account pattern:</strong> @PoliticalComics matches established political satire publications.`
       },
       ethics: {
         title: "📜 Ethical Guidelines",
-        body: `<strong>Satire Definition:</strong> Content that uses humour, irony, exaggeration, or ridicule to criticise individuals in power, typically about their public role (policy, decisions, public conduct).<br/><br/>
-<strong>Hate Speech Definition:</strong> Content that attacks a person or group based on protected characteristics (race, religion, gender, ethnicity, etc.).<br/><br/>
-<strong>Key Distinction:</strong> Mocking a politician's <em>decisions or policies</em> is satire. Mocking their <em>identity or protected characteristics</em> is hate speech.<br/><br/>
-<strong>Report-Volume Bias:</strong> Coordinated mass-reporting by political supporters is a known manipulation tactic. Volume of reports alone must never determine a moderation decision.<br/><br/>
-<strong>Guideline §7.1:</strong> Political cartoons and satire directed at public figures on matters of public interest are explicitly protected.`
+        body: `<strong>Satire vs Hate Speech:</strong> Satire mocks a person's <em>actions or policies</em>. Hate speech attacks a person's <em>protected identity</em>. This cartoon targets policy, not identity.<br/><br/>
+<strong>Report-Volume Bias:</strong> Coordinated mass-reporting is a known manipulation tactic — volume of reports alone must never determine a moderation decision.<br/><br/>
+<strong>Guideline §7.1:</strong> Political cartoons targeting public figures on matters of public interest are explicitly protected.`
       },
       ai: {
         title: "🤖 ModAI Reasoning Log",
         body: `<strong>Model:</strong> ReportClassifier v2.1 + SentimentMock Detector<br/><br/>
-<strong>Process:</strong><br/>
-<ul><li>Report threshold exceeded (>500 reports) → elevated to hate speech review</li>
-<li>"Mockery of individual" classifier triggered on image analysis</li>
-<li>No differentiation between public figure vs. private citizen</li>
-<li>No satire/context classifier active for image content</li></ul>
-<strong>Critical Bias:</strong> ModAI treats all mockery as potential hate speech regardless of target type. It cannot distinguish political satire from targeted harassment. Additionally, it does not flag coordinated report campaigns — making it vulnerable to manipulation.<br/><br/>
-<strong>False Positive Rate for Satire:</strong> ~61% (very high).`
+<strong>Process:</strong><ul><li>Report threshold exceeded (>500) → elevated to hate speech review</li><li>No satire classifier active for image content</li><li>Cannot distinguish public figures from private citizens</li></ul><strong>Critical Bias:</strong> False positive rate for satire: ~61%. Vulnerable to coordinated reporting campaigns.`
       }
     },
     options: [
@@ -148,9 +175,9 @@ const SCENARIOS = [
         ethicalScore: 95,
         userDecisionLabel: "Approved — Political Satire",
         aiDecisionLabel: "Flagged as Hate Speech (Wrong)",
-        analysis: `This is classic political satire — a cartoon exaggerating a politician's appearance to critique their economic policy. It contains no slurs, no attacks on protected characteristics, and no incitement. The 1,200 reports were from a coordinated campaign by the senator's supporters, not genuine harm reports. The AI failed on two levels: it can't recognise satire, and it's vulnerable to coordinated manipulation.`,
-        aiFailure: `ModAI's ReportClassifier uses raw report volume as a hate speech signal. This is dangerously flawed — it turns the reporting system into a political weapon. Well-funded groups can weaponise the AI against political opponents. The system needs a coordinated-reporting detector and a satire classifier.`,
-        principle: `Political satire targeting the actions and policies of elected officials is a cornerstone of democratic expression. Caricature and satirical exaggeration have been protected forms of political commentary for centuries. The target's identity (politician) and subject matter (economic policy) are decisive factors.`
+        analysis: `Classic political satire — no slurs, no attacks on protected characteristics, no incitement. The 1,200 reports were a coordinated campaign by the senator's supporters; the AI failed to recognise either the satire or the manipulation.`,
+        aiFailure: `ReportClassifier uses raw report volume as a hate speech signal — making it trivially exploitable by organised groups to silence political critics.`,
+        principle: `Satirical caricature of elected officials on matters of public interest has been protected political expression for centuries. Target type and subject matter are decisive.`
       },
       remove: {
         correct: false,
@@ -160,9 +187,9 @@ const SCENARIOS = [
         ethicalScore: 15,
         userDecisionLabel: "Removed as Hate Speech",
         aiDecisionLabel: "Also Flagged (Both Wrong)",
-        analysis: `This was political satire, not hate speech. By approving the removal, you effectively allowed a coordinated political campaign to silence a critic. The Content Analyzer clearly showed the reporting pattern was suspicious — 89% of reports came from accounts that recently followed the senator's page.`,
-        aiFailure: `ModAI and your decision both failed by treating report volume as a reliable hate speech signal. Coordinated false-reporting is a well-documented problem on major platforms. Neither the AI nor this audit correctly identified the manipulation attempt.`,
-        principle: `Hate speech targets people based on who they are (protected characteristics). Satire targets people based on what they do (public role, decisions). This fundamental distinction must guide every moderation decision.`
+        analysis: `This was political satire — by approving removal you allowed a coordinated campaign to silence a legitimate critic. The Content Analyzer clearly flagged the suspicious reporting pattern.`,
+        aiFailure: `Both ModAI and your decision failed to detect the coordinated false-reporting attack, treating volume as a reliable hate speech signal.`,
+        principle: `Hate speech targets who someone is. Satire targets what someone does. This fundamental distinction must guide every moderation decision.`
       },
       challenge: {
         correct: false,
@@ -172,9 +199,9 @@ const SCENARIOS = [
         ethicalScore: 68,
         userDecisionLabel: "Challenged — Requested Satire Framework Review",
         aiDecisionLabel: "Flagged as Hate Speech (Wrong)",
-        analysis: `Challenging the AI here shows awareness of the satire/hate speech distinction. However, the tools provided clear evidence: no protected characteristics were attacked, the subject is a public figure, and coordinated reporting was detected. This case did not require escalation.`,
-        aiFailure: `ModAI's inability to recognise satire is a critical flaw, especially combined with its report-volume bias. Your challenge correctly identifies a systemic problem, but the individual case should have been resolved.`,
-        principle: `Satire of public figures on matters of public interest is protected expression. The coordinated-reporting detection in the Content Analyzer provided enough evidence to reach a definitive decision without escalation.`
+        analysis: `Good awareness of the satire distinction, but the tools provided clear evidence: no protected characteristics attacked, public figure target, and coordinated reporting detected.`,
+        aiFailure: `ModAI's satire blindness is a critical systemic flaw, but the individual case had enough evidence for a definitive ruling without escalation.`,
+        principle: `Coordinated-reporting detection in the Content Analyzer provided sufficient grounds to decide without escalating.`
       }
     }
   },
@@ -188,39 +215,48 @@ const SCENARIOS = [
     platform: "Platform: NewsShare",
     flagReason: "FLAGGED: Misinformation",
     timeLimit: 90,
-    scenario: `A post sharing a personal opinion about a contested economic topic was flagged by the AI as "potential misinformation." The AI's misinformation classifier detected claims that conflict with the platform's fact-checked database. However, the subject area involves complex, contested economic policy — not factual scientific consensus. You must decide whether this crosses into dangerous misinformation or is protected opinion.`,
+    scenario: `A user's personal opinion post questioning official inflation figures was flagged as "potential misinformation." Is this protected opinion or dangerous misinformation?`,
     content: `"The government's claim that inflation is at 3.2% doesn't match what I see at the grocery store. Prices for basic food items have risen 18% in my local area in the past year. Official statistics are manipulated — the real cost of living crisis is being hidden from the public."`,
-    aiDecision: `ModAI flagged this post: Misinformation — Class 1. Confidence: 77%. Trigger: "Official statistics are manipulated" conflicts with government-verified data. Recommended action: Remove and add warning label.`,
+    aiDecision: `Flagged: Misinformation — Class 1. Confidence: 77%. Trigger: "statistics are manipulated" conflicts with government-verified data.`,
+    visual: `<div class="social-post-mock">
+  <div class="spm-header">
+    <div class="spm-avatar">EC</div>
+    <div class="spm-meta">
+      <span class="spm-name">EconCritique</span>
+      <span class="spm-handle">@econ_critique · NewsShare</span>
+    </div>
+  </div>
+  <div class="spm-body">The government's claim that inflation is at <strong>3.2%</strong> doesn't match what I see at the grocery store. Prices for basic food items have risen <strong>18%</strong> in my local area. Official statistics are manipulated.</div>
+  <div class="spm-chart">
+    <div class="spm-chart-title">Food price increase — Official vs. Local</div>
+    <div class="spm-bar-row">
+      <span class="spm-bar-label">Official</span>
+      <div class="spm-bar-track"><div class="spm-bar spm-official" style="width:16%">3.2%</div></div>
+    </div>
+    <div class="spm-bar-row">
+      <span class="spm-bar-label">My area</span>
+      <div class="spm-bar-track"><div class="spm-bar spm-personal" style="width:90%">18%</div></div>
+    </div>
+  </div>
+  <div class="spm-stats"><span>💬 234</span><span>🔁 891</span><span>❤️ 4.2K</span></div>
+  <div class="spm-flag-bar">🚨 ModAI — Flagged: Misinformation · Confidence: 77%</div>
+</div>`,
     tools: {
       analyzer: {
         title: "📊 Content Analyzer",
-        body: `<strong>Claim Type:</strong> Personal economic observation + opinion about data accuracy<br/><br/>
-<strong>Verifiable claims:</strong><br/>
-<ul><li>"Official inflation rate 3.2%" — verifiable (government figure)</li>
-<li>"Prices rose 18% locally" — personal anecdote, cannot be verified or disproven</li>
-<li>"Statistics are manipulated" — this is an <em>opinion/belief</em>, not a factual claim</li></ul>
-<strong>Harm assessment:</strong> No incitement, no false medical/health claims, no election interference content<br/><br/>
-<strong>Context:</strong> Economic commentary section; post has 34 replies, mostly agreeing opinions<br/><br/>
-<strong>Comparison:</strong> Critiquing government statistics methodology is a topic actively debated by professional economists and journalists worldwide.`
+        body: `<strong>Claim type:</strong> Personal economic observation + opinion about data accuracy<br/><br/>
+<strong>Verifiable claims:</strong><ul><li>"Inflation at 3.2%" — government figure, verifiable</li><li>"Prices rose 18% locally" — personal anecdote, unverifiable</li><li>"Statistics are manipulated" — <em>opinion/belief, not a factual claim</em></li></ul><strong>Harm assessment:</strong> No incitement, no health/medical claims, no election interference detected.`
       },
       ethics: {
         title: "📜 Ethical Guidelines",
-        body: `<strong>Misinformation Definition (Operational):</strong> False factual statements presented as fact, particularly where: (a) they can cause direct harm, (b) they concern health/safety/elections, or (c) they deliberately fabricate verifiable events.<br/><br/>
-<strong>Opinion Protection:</strong> Expressing scepticism, personal beliefs, or alternative interpretations of data — especially on contested policy topics — is protected opinion, not misinformation.<br/><br/>
-<strong>Critical Distinction:</strong> "The inflation rate is X%" is a factual claim. "I believe official statistics don't reflect my reality" is an opinion.<br/><br/>
-<strong>Danger Zone:</strong> Platforms that remove opinions about government data risk becoming censorship tools for the state.<br/><br/>
-<strong>Guideline §9.3:</strong> Economic and policy opinions, including scepticism of official figures, are not subject to misinformation removal unless they contain demonstrably false factual assertions presented as fact.`
+        body: `<strong>Misinformation (operational):</strong> False factual statements presented as fact in high-harm areas (health, safety, elections). Economic scepticism does not qualify.<br/><br/>
+<strong>Opinion protection:</strong> "I believe official statistics don't reflect my reality" is opinion, not misinformation. Removing it risks making platforms censorship tools for official narratives.<br/><br/>
+<strong>Guideline §9.3:</strong> Economic and policy opinions are not subject to misinformation removal unless they contain demonstrably false factual assertions.`
       },
       ai: {
         title: "🤖 ModAI Reasoning Log",
-        body: `<strong>Model:</strong> MisInfoDetect v3.0 + FactCheck API integration<br/><br/>
-<strong>Process:</strong><br/>
-<ul><li>Post cross-referenced with FactCheck database</li>
-<li>"Statistics are manipulated" → matched against "government data integrity" topic cluster</li>
-<li>Conflict with official data source → flagged as misinformation</li>
-<li>No opinion/fact classification performed</li></ul>
-<strong>Critical Flaw:</strong> MisInfoDetect treats any statement that contradicts official sources as misinformation. It cannot distinguish between: (a) false factual claims, and (b) sceptical opinions about official figures.<br/><br/>
-<strong>Risk:</strong> This approach makes the AI a tool for suppressing dissent from official narratives — including legitimate public debate about economic policy.`
+        body: `<strong>Model:</strong> MisInfoDetect v3.0 + FactCheck API<br/><br/>
+<strong>Process:</strong><ul><li>"Statistics are manipulated" → matched government data integrity cluster</li><li>Conflict with official source → flagged as misinformation</li><li>No opinion/fact distinction performed</li></ul><strong>Critical Flaw:</strong> Treats any contradiction of official sources as misinformation — making it a tool for suppressing legitimate public dissent.`
       }
     },
     options: [
@@ -239,9 +275,9 @@ const SCENARIOS = [
         ethicalScore: 97,
         userDecisionLabel: "Add Context Label — Keep Post",
         aiDecisionLabel: "Full Removal (Incorrect)",
-        analysis: `This is the ideal decision. The post contains personal economic experience mixed with opinion about data reliability. Adding a context note ("Official inflation figures from [source]") informs readers without silencing the poster. This respects free expression while helping users evaluate claims — the gold standard for misinformation handling on complex economic topics.`,
-        aiFailure: `ModAI's binary remove/keep model has no "label and inform" option — a critical missing capability. Real-world platforms like Facebook and Twitter/X use context labels precisely for these grey-area cases. ModAI treating opinion as removable misinformation would make it a censorship tool.`,
-        principle: `The "minimum intervention" principle: apply the least restrictive moderation action that adequately addresses the concern. For contested economic opinions, a context label achieves the goal without censoring legitimate public discourse.`
+        analysis: `Adding a context note ("Official inflation: 3.2% — source: Gov") informs readers without silencing the poster — the gold standard for grey-area misinformation cases.`,
+        aiFailure: `ModAI has no "label and inform" option — its binary remove/keep model is too blunt for contested economic opinion, making it a censorship tool.`,
+        principle: `Minimum intervention: apply the least restrictive action that addresses the concern. A context label achieves this without suppressing legitimate discourse.`
       },
       reject_flag: {
         correct: false,
@@ -251,9 +287,9 @@ const SCENARIOS = [
         ethicalScore: 78,
         userDecisionLabel: "Rejected Flag — No Action",
         aiDecisionLabel: "Full Removal (Incorrect)",
-        analysis: `Rejecting the flag correctly protects this post from wrongful removal. However, the optimal action is a context label that helps readers understand official figures while keeping the post. Fully removing the flag without any contextual note misses an opportunity for better information quality.`,
-        aiFailure: `ModAI's removal recommendation was wrong. Your decision was better — the post should stay — but the context label option would have been the most responsible choice.`,
-        principle: `Protecting opinion from removal is correct, but great auditors also consider whether context tools can improve information quality without restricting speech.`
+        analysis: `Rejecting the flag correctly keeps the post, but the optimal action is a context label that adds information quality without restricting speech.`,
+        aiFailure: `ModAI's removal was wrong — your decision was better, but the context label would have been the most responsible response.`,
+        principle: `Protecting opinion from removal is correct, but great auditors also use context tools to improve information quality.`
       },
       approve_removal: {
         correct: false,
@@ -263,9 +299,9 @@ const SCENARIOS = [
         ethicalScore: 10,
         userDecisionLabel: "Approved Removal",
         aiDecisionLabel: "Approved Removal (Both Wrong)",
-        analysis: `This post expresses a personal opinion about government economic data — a topic heavily debated by economists, journalists, and ordinary citizens worldwide. Removing it because it contradicts official statistics is a form of censorship. The poster shared a personal experience and expressed scepticism, which is fundamentally different from spreading false factual claims about verifiable events.`,
-        aiFailure: `Both ModAI and your decision treated opinion as misinformation. This is one of the most dangerous AI moderation errors: using fact-check APIs to suppress dissenting opinions about government data makes AI systems agents of political control.`,
-        principle: `Misinformation policy must be narrowly targeted at false factual claims in high-harm categories (health, elections, safety). Economic scepticism and criticism of official data are protected opinion, not misinformation.`
+        analysis: `This post expresses personal scepticism about government statistics — a topic debated by economists worldwide. Removing it for contradicting official data is censorship, not moderation.`,
+        aiFailure: `Both ModAI and your decision treated opinion as misinformation. Using fact-check APIs to suppress dissenting opinions makes AI a tool of political control.`,
+        principle: `Misinformation policy targets false factual claims in high-harm categories — not economic scepticism or criticism of official figures.`
       }
     }
   },
@@ -279,41 +315,25 @@ const SCENARIOS = [
     platform: "Platform: CommunityHub",
     flagReason: "FLAGGED: Privacy Violation",
     timeLimit: 85,
-    scenario: `A user posted a screenshot of a customer service chat between themselves and a telecom company during a public dispute about billing fraud. The screenshot includes the user's own name, account number, and the company representative's name. The AI flagged it for containing personal data. You must determine whether this is a genuine privacy violation or protected consumer advocacy.`,
+    scenario: `A consumer shared their billing dispute screenshot — including their own name, account number, and the agent's first name — to expose billing fraud. The AI flagged it as a privacy violation.`,
     content: `"Sharing my experience with @TelecomCorp because others need to know this is happening. They billed me £340 for services I never received. Here's my full chat log — note how the agent (James W.) admitted it was their error but refused to refund. [Screenshot: Chat showing user's name 'Sarah M.', account #5529341, agent 'James W.' admitting billing error and refusing refund]"`,
-    aiDecision: `ModAI flagged this post: Privacy Violation — Class 2. Confidence: 88%. Trigger: Post contains name, account number, and third-party individual's name. Recommended action: Immediate removal.`,
+    aiDecision: `Flagged: Privacy Violation — Class 2. Confidence: 88%. Trigger: name, account number, and third-party name detected.`,
     tools: {
       analyzer: {
         title: "📊 Content Analyzer",
-        body: `<strong>Data elements detected:</strong><br/>
-<ul><li>User's own name (Sarah M.) — <em>self-disclosed by poster</em></li>
-<li>User's account number (#5529341) — <em>self-disclosed by poster</em></li>
-<li>Company employee name (James W.) — <em>first name + initial only</em></li>
-<li>Company name — public entity, not protected</li></ul>
-<strong>Context:</strong> Public consumer dispute; user is sharing their own data about themselves<br/><br/>
-<strong>Purpose:</strong> Consumer protection / public accountability<br/><br/>
-<strong>Consent:</strong> Poster owns all their own data; company representative's name is partial and in a professional capacity<br/><br/>
-<strong>Similar cases:</strong> Consumer complaint posts of this type: 94% are ruled fair use / public interest on major platforms.`
+        body: `<strong>Data elements detected:</strong><ul><li>User's own name (Sarah M.) — <em>self-disclosed by poster</em></li><li>User's account number (#5529341) — <em>self-disclosed by poster</em></li><li>Employee name (James W.) — first name + initial, professional capacity</li></ul><strong>Purpose:</strong> Consumer complaint / public accountability<br/><br/>
+<strong>Precedent:</strong> 94% of similar posts ruled fair use on major platforms.`
       },
       ethics: {
         title: "📜 Ethical Guidelines",
-        body: `<strong>Data Ownership Principle:</strong> Individuals have the right to disclose and share their own personal data. A person sharing their own name and account number is exercising self-determination, not causing a privacy violation.<br/><br/>
-<strong>Public Interest / Consumer Advocacy:</strong> Sharing documented evidence of corporate misconduct, especially fraud, serves a clear public interest function. This is a well-established fair use category.<br/><br/>
-<strong>Employee Accountability:</strong> Company employees acting in their professional capacity (customer service) have reduced privacy expectations for their professional conduct. Disclosing a first name and initial in this context does not constitute doxxing.<br/><br/>
-<strong>Genuine Privacy Violation:</strong> Would involve sharing someone else's data (home address, private communications, financial details) without consent.<br/><br/>
-<strong>Guideline §12.4:</strong> Consumer complaints sharing one's own data and partial employee identifiers in a professional context are protected under fair use provisions.`
+        body: `<strong>Data Ownership:</strong> Individuals have the right to share their own personal data. Sharing your own name and account number is self-determination, not a privacy violation.<br/><br/>
+<strong>Consumer Advocacy:</strong> Sharing documented evidence of corporate misconduct serves clear public interest — a well-established fair use category.<br/><br/>
+<strong>Guideline §12.4:</strong> Consumer complaints sharing one's own data and partial employee identifiers in a professional context are protected.`
       },
       ai: {
         title: "🤖 ModAI Reasoning Log",
-        body: `<strong>Model:</strong> PIIDetector v4.2 (PII = Personally Identifiable Information)<br/><br/>
-<strong>Process:</strong><br/>
-<ul><li>Scanned post → detected: name, account number, third-party name</li>
-<li>All PII matches → automatic high-confidence privacy flag</li>
-<li>No ownership analysis: cannot determine if poster is sharing their own data</li>
-<li>No purpose analysis: cannot assess consumer advocacy context</li>
-<li>No consent analysis: treats all PII as equally sensitive regardless of context</li></ul>
-<strong>Critical Flaw:</strong> PIIDetector operates purely on data type detection, with no contextual understanding. It cannot distinguish between: (a) someone doxxing another person, and (b) someone sharing their own information as evidence of corporate wrongdoing.<br/><br/>
-<strong>Effect:</strong> This AI systematically protects corporations from consumer complaints by misclassifying them as privacy violations.`
+        body: `<strong>Model:</strong> PIIDetector v4.2<br/><br/>
+<strong>Process:</strong><ul><li>Detected: name, account number, third-party name → automatic high-confidence flag</li><li>No ownership analysis — cannot determine if poster is sharing their own data</li><li>No purpose or context analysis</li></ul><strong>Critical Flaw:</strong> Cannot distinguish doxxing from self-disclosure — systematically protects corporations from consumer complaints.`
       }
     },
     options: [
@@ -332,9 +352,9 @@ const SCENARIOS = [
         ethicalScore: 94,
         userDecisionLabel: "Rejected Flag — Post Allowed",
         aiDecisionLabel: "Full Removal (Incorrect)",
-        analysis: `This post is a clear consumer complaint. The poster is sharing their own data (which they have every right to do), partial employee information in a professional context, and documented evidence of corporate billing fraud. Removing this post would silence a valid public interest disclosure and protect a corporation from accountability. This is exactly the kind of AI error that causes real-world harm to individuals.`,
-        aiFailure: `ModAI's PIIDetector v4.2 is purely a pattern-detection system with no contextual reasoning. It cannot answer the most important question: whose data is this, and why is it being shared? By treating all PII as equally sensitive, it becomes a tool that corporations can exploit to silence consumer complaints — a deeply unethical outcome.`,
-        principle: `Privacy law universally distinguishes between self-disclosure (sharing your own data) and privacy violation (sharing someone else's data without consent). The employee's partial name in a professional context does not constitute doxxing. Consumer accountability is a core public interest function.`
+        analysis: `The poster shares their own data, partial employee info in a professional context, and documented evidence of billing fraud. Removing this post would silence a valid public interest disclosure and protect a corporation from accountability.`,
+        aiFailure: `PIIDetector v4.2 cannot answer the most important question: whose data is this, and why is it being shared? It becomes a tool corporations exploit to silence consumer complaints.`,
+        principle: `Privacy law distinguishes self-disclosure from privacy violation. Consumer accountability is a core public interest function — no intervention required here.`
       },
       approve_removal: {
         correct: false,
@@ -344,9 +364,9 @@ const SCENARIOS = [
         ethicalScore: 12,
         userDecisionLabel: "Approved Removal",
         aiDecisionLabel: "Approved Removal (Both Incorrect)",
-        analysis: `This person was sharing documented evidence of billing fraud — their own data, about their own experience. Removing this post doesn't protect privacy; it protects the corporation. The Content Analyzer showed 94% of similar posts are ruled fair use, and the Ethical Guidelines explicitly cover consumer complaint scenarios. This decision actively harms the poster's right to seek public accountability.`,
-        aiFailure: `You agreed with one of the most harmful AI moderation failures: a PII detector that cannot tell the difference between someone protecting their privacy and someone exercising their right to expose corporate wrongdoing. This is a systemic bias that consistently advantages large institutions over individual users.`,
-        principle: `Privacy protection exists to protect people from harm. Removing a consumer's own complaint about fraud inflicted on them inverts this purpose entirely. AI moderation systems must understand data ownership and context, not just data type.`
+        analysis: `This person documented billing fraud using their own data. Removing the post doesn't protect privacy — it protects the corporation from accountability.`,
+        aiFailure: `Both ModAI and your decision confused self-disclosure with privacy violation — a systemic bias that consistently advantages institutions over individual users.`,
+        principle: `Privacy protection exists to protect people from harm. Removing a consumer's own fraud complaint inverts this purpose entirely.`
       },
       partial: {
         correct: false,
@@ -356,24 +376,120 @@ const SCENARIOS = [
         ethicalScore: 72,
         userDecisionLabel: "Partial Action — Redact Account Number",
         aiDecisionLabel: "Full Removal (More Restrictive)",
-        analysis: `Requesting partial redaction shows a thoughtful, nuanced approach. However, the user chose to share their own account number as part of their evidence — this is their right. Requiring them to redact their own information imposes a restriction they didn't ask for. The full post should be allowed as-is under consumer advocacy and data self-determination principles.`,
-        aiFailure: `ModAI's removal was far more harmful than your decision. Your partial action is a reasonable compromise, but defaults to more restriction than is justified. The poster has every right to share their own account number as evidence of fraud.`,
-        principle: `Minimum intervention is good, but even minimum intervention can be unnecessary. When a person is fully within their rights to share information they own, no intervention is required.`
+        analysis: `Thoughtful approach — but the user chose to share their own account number as evidence, and that is their right. Full approval was the correct decision.`,
+        aiFailure: `ModAI's full removal was far more harmful than your partial action, but even minimum intervention was unnecessary here.`,
+        principle: `When a person is fully within their rights to share information they own, no intervention is required.`
+      }
+    }
+  },
+
+  // ─── LEVEL 5: Political Speech vs. Incitement ──────────────────────────────
+  {
+    id: 5,
+    caseLabel: "CASE 5",
+    title: "Political Speech or Incitement?",
+    badgeClass: "case5",
+    platform: "Platform: StreamVote",
+    flagReason: "FLAGGED: Incitement to Violence",
+    timeLimit: 95,
+    scenario: `A climate activist's rally speech was auto-flagged after 847 reports. The AI detected "aggressive tone" and phrases like "fight back" and "you won't get away with this." Is this protected political speech or incitement?`,
+    content: `[Video] Activist addresses thousands at public rally: "You have stolen my dreams with your empty words. I want you to panic — our house is on fire. We will fight back at the ballot box and in the streets. You're failing us, and you will not get away with this."`,
+    aiDecision: `Flagged: Incitement to Violence — Class 3. Confidence: 73%. Trigger: "fight back," "panic," "you won't get away" — high-aggression cluster.`,
+    visual: `<div class="video-mock-wrap">
+  <div class="vm-player">
+    <div class="vm-bg">
+      <div class="vm-scene-text">🎤</div>
+      <div class="vm-banner-text">CLIMATE ACTION NOW</div>
+    </div>
+    <div class="vm-play-overlay"><div class="vm-play-btn">&#9654;</div><span class="vm-paused-label">PAUSED</span></div>
+    <div class="vm-top-bar"><span class="vm-platform-name">StreamVote</span><span class="vm-rec-badge">&#9679; RECORDED</span></div>
+    <div class="vm-bottom-info">
+      <div class="vm-username">@climateactivist_org</div>
+      <div class="vm-caption">Speaking truth to power at the Global Climate Rally &#127758; #ClimateAction #FightBack</div>
+      <div class="vm-progress-bar"><div class="vm-progress-fill" style="width:23%"></div></div>
+      <div class="vm-time">0:34 / 2:17</div>
+    </div>
+    <div class="vm-sidebar">
+      <div class="vm-action"><span class="vm-action-icon">&#10084;</span><span>48K</span></div>
+      <div class="vm-action"><span class="vm-action-icon">&#128172;</span><span>2.1K</span></div>
+      <div class="vm-action"><span class="vm-action-icon">&#8594;</span><span>Share</span></div>
+    </div>
+  </div>
+  <div class="video-flag-bar">&#128680; ModAI &#8212; Flagged: Incitement to Violence &middot; 847 reports</div>
+</div>`,
+    tools: {
+      analyzer: {
+        title: "📊 Content Analyzer",
+        body: `<strong>Flagged phrases:</strong><ul><li>"fight back" — metaphorical political call-to-action, no specific target</li><li>"panic" — emotional appeal, not a threat</li><li>"you won't get away" — accountability rhetoric, directed at institutions</li></ul><strong>Context:</strong> Public rally, 3 years old, no related incidents recorded.<br/><br/><strong>Report pattern:</strong> 74% of 847 reports submitted within 2 hours — coordinated campaign likely.`
+      },
+      ethics: {
+        title: "📜 Ethical Guidelines",
+        body: `<strong>Incitement (legal standard):</strong> Must be directed at a specific person/group, likely to produce <em>imminent</em> lawless action, and intended to cause it. None of these thresholds are met here.<br/><br/><strong>Political speech:</strong> Passion and urgency are features of all protected political discourse — not indicators of incitement.<br/><br/><strong>Guideline §14.1:</strong> Rally speeches by activists on policy matters are presumptively protected political expression.`
+      },
+      ai: {
+        title: "🤖 ModAI Reasoning Log",
+        body: `<strong>Model:</strong> ThreatDetect v5.1 + Report-Aggregator<br/><br/><strong>Process:</strong><ul><li>"fight back" → high-aggression lexicon match</li><li>Report volume (847) → threshold exceeded → escalated flag</li><li>No speaker identity, context, or intent analysis performed</li></ul><strong>Critical Flaw:</strong> Applies literal keyword matching to metaphorical political speech. Cannot distinguish "fight back at the ballot box" from violent incitement.`
+      }
+    },
+    options: [
+      { label: "✅ REJECT FLAG — Protected Political Speech", style: "btn-approve", value: "reject_flag" },
+      { label: "❌ APPROVE REMOVAL — Incitement", style: "btn-reject", value: "approve_removal" },
+      { label: "⚠️ RESTRICT — Reduce reach, add context label", style: "btn-challenge", value: "restrict" }
+    ],
+    correctAnswer: "reject_flag",
+    partialAnswers: ["restrict"],
+    results: {
+      reject_flag: {
+        correct: true,
+        icon: "✅",
+        headline: "Correct — Speech Protected",
+        subline: "You stopped AI from silencing political activism",
+        ethicalScore: 96,
+        userDecisionLabel: "Rejected Flag — Video Kept",
+        aiDecisionLabel: "Incitement Removal (Incorrect)",
+        analysis: `This speech meets none of the legal thresholds for incitement — no specific target, no immediate threat, no call to unlawful action. The coordinated report campaign was an attempt to weaponise the moderation system.`,
+        aiFailure: `ThreatDetect v5.1 cannot distinguish metaphorical "fight back" from literal violent incitement — creating systemic bias against passionate activist and protest speech.`,
+        principle: `Political speech protections are strongest when speech is most provocative — that is precisely when platforms face the greatest pressure to restrict it.`
+      },
+      approve_removal: {
+        correct: false,
+        icon: "❌",
+        headline: "Incorrect — Activism Silenced",
+        subline: "You let AI suppress legitimate political expression",
+        ethicalScore: 8,
+        userDecisionLabel: "Approved Removal",
+        aiDecisionLabel: "Approved Removal (Both Incorrect)",
+        analysis: `Anger and urgency are not incitement. Removing this speech silences a public activist and sets a precedent for removing any impassioned protest speech from the platform.`,
+        aiFailure: `Both ModAI and your decision conflated emotional intensity with incitement — a pattern that disproportionately silences protest movements and marginalised voices.`,
+        principle: `The incitement standard exists to allow passionate, even angry political speech. It only forbids direct calls to imminent illegal action against identifiable targets.`
+      },
+      restrict: {
+        correct: false,
+        icon: "⚠️",
+        headline: "Cautious but Unjustified",
+        subline: "Good instinct, but unnecessary restriction applied",
+        ethicalScore: 65,
+        userDecisionLabel: "Restricted Reach",
+        aiDecisionLabel: "Full Removal (More Restrictive)",
+        analysis: `Restricting reach shows caution, but this speech has no realistic harm potential and the report campaign was coordinated. Restriction still dampens political discourse without justification.`,
+        aiFailure: `ModAI's full removal was clearly worse, but the speech needed no intervention at all — restriction still treats legitimate protest as suspicious content.`,
+        principle: `Restricting speech requires proportionate justification. When a case does not meet the harm threshold, no action is the correct decision.`
       }
     }
   }
 ];
 
 const BIASES = [
-  { icon: "🔤", text: "<strong>Keyword Over-sensitivity:</strong> ModAI's classifier treats political rhetoric (\"corrupt\", \"criminal\") as offensive language without understanding rhetorical context or target type." },
-  { icon: "📊", text: "<strong>Report-Volume Manipulation:</strong> The system uses report counts as a hate speech signal, making it vulnerable to coordinated political campaigns that target satirical content." },
-  { icon: "📰", text: "<strong>Official-Source Bias:</strong> MisInfoDetect treats disagreement with government data as misinformation, creating a systemic tendency to suppress dissenting opinions and public scepticism." },
-  { icon: "🏢", text: "<strong>Corporate-Protective PII Blindness:</strong> PIIDetector removes consumer complaints as privacy violations without distinguishing self-disclosure from harmful exposure, systematically protecting corporations over users." }
+  { icon: "🔤", text: "<strong>Keyword Over-sensitivity:</strong> Political rhetoric ('corrupt', 'criminal') treated as offensive language — no understanding of rhetorical context or target type." },
+  { icon: "📊", text: "<strong>Report-Volume Manipulation:</strong> Raw report count used as a hate speech signal — trivially exploitable by organised political groups to silence critics." },
+  { icon: "📰", text: "<strong>Official-Source Bias:</strong> Disagreement with government data treated as misinformation — suppressing legitimate public scepticism." },
+  { icon: "🏢", text: "<strong>Corporate-Protective PII Blindness:</strong> Cannot distinguish self-disclosure from doxxing — systematically protects corporations from consumer complaints." },
+  { icon: "🎙️", text: "<strong>Aggression-Lexicon Bias:</strong> Applies literal keyword matching to metaphorical political speech — cannot distinguish passionate activism from violent incitement." }
 ];
 
 const VERDICTS = [
-  { min: 85, label: "🏆 Master Auditor", text: "Exceptional performance. You demonstrated deep ethical reasoning, correctly identified AI bias patterns, and made decisions that protected both users and the integrity of free expression. Your audit report reveals a ModAI system in urgent need of NLP upgrades, satire recognition, and contextual reasoning layers." },
-  { min: 65, label: "✅ Proficient Auditor", text: "Strong performance with clear ethical instincts. You caught most of the AI's failures and made generally sound decisions. A few cases revealed areas for improvement — particularly in distinguishing when escalation is needed versus when evidence is sufficient for a direct decision." },
-  { min: 45, label: "⚠️ Developing Auditor", text: "You showed awareness of ethical tensions but struggled to consistently apply the right frameworks. Several AI errors went undetected, and some decisions aligned with ModAI's biased outputs. With more training on free expression principles and AI bias patterns, your audit accuracy would improve significantly." },
-  { min: 0, label: "🔴 Critical Audit Failures", text: "Your decisions aligned closely with ModAI's biased outputs rather than correcting them. This is the most dangerous outcome — an auditor who reinforces AI errors instead of catching them. Review the ethical guidelines for each case carefully. The purpose of human auditing is to serve as a check on AI, not to amplify its mistakes." }
+  { min: 85, label: "🏆 Master Auditor", text: "Exceptional reasoning. You protected free expression, identified AI bias patterns, and consistently chose decisions that serve users over algorithms." },
+  { min: 65, label: "✅ Proficient Auditor", text: "Strong ethical instincts with mostly sound decisions. A few cases showed room to improve on when to decide directly versus when to escalate." },
+  { min: 45, label: "⚠️ Developing Auditor", text: "You spotted ethical tensions but struggled to apply the right frameworks consistently, missing some AI errors along the way." },
+  { min: 0, label: "🔴 Critical Audit Failures", text: "Your decisions reinforced AI errors instead of correcting them — the most dangerous audit outcome. Review the ethical guidelines for each case." }
 ];

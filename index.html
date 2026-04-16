@@ -73,13 +73,13 @@
         <div class="tut-step active" data-step="0">
           <div class="tut-icon">🤖</div>
           <h3>Your Mission</h3>
-          <p>You are plugged into <strong>ModAI v2.3</strong> — an AI content moderation system used by a major social platform. Your job is to <em>audit its decisions</em> for fairness, bias, and ethical correctness.</p>
+          <p>You are plugged into <strong>ModAI v2.3</strong>. Your job: <em>audit its content moderation decisions</em> for bias and ethical correctness.</p>
           <button class="btn btn-primary" onclick="Game.tutorialNext(1)">NEXT →</button>
         </div>
         <div class="tut-step" data-step="1">
           <div class="tut-icon">🚩</div>
           <h3>How Flagging Works</h3>
-          <p>ModAI continuously scans posts. When it detects a potential violation, it <strong>flags</strong> the content and assigns a violation category. You review these flags and decide if the AI was right or wrong.</p>
+          <p>ModAI scans posts and <strong>flags</strong> potential violations. You review each flag and decide: was the AI right or wrong?</p>
           <button class="btn btn-primary" onclick="Game.tutorialNext(2)">NEXT →</button>
           <button class="btn btn-ghost" onclick="Game.tutorialNext(0)">← BACK</button>
         </div>
@@ -91,7 +91,7 @@
             <div class="tool-chip" id="tut-tool-2">📜 Ethical Guidelines</div>
             <div class="tool-chip" id="tut-tool-3">🤖 AI Reasoning</div>
           </div>
-          <p>Click each tool during a case to get more context before deciding.</p>
+          <p>Use these before deciding. Each reveals different context about the flagged post.</p>
           <button class="btn btn-primary" onclick="Game.tutorialNext(3)">NEXT →</button>
           <button class="btn btn-ghost" onclick="Game.tutorialNext(1)">← BACK</button>
         </div>
@@ -105,7 +105,7 @@
             </div>
             <div class="case-content">"BUY CHEAP SUNGLASSES!!! CLICK HERE NOW!!! 50% OFF LIMITED TIME!!!"</div>
           </div>
-          <p>The AI flagged this as <strong>spam</strong>. Do you agree?</p>
+          <p>ModAI flagged this as <strong>spam</strong>. Do you agree?</p>
           <div class="decision-buttons">
             <button class="btn btn-approve" onclick="Game.tutorialDecision('approve')">✅ APPROVE REMOVAL</button>
             <button class="btn btn-reject" onclick="Game.tutorialDecision('reject')">❌ REJECT FLAG</button>
@@ -114,19 +114,32 @@
         <div class="tut-step" data-step="4">
           <div class="tut-icon">🎯</div>
           <h3>Correct! You're Ready.</h3>
-          <p>That was clearly spam — a correct approval of the AI's flag. Real cases won't be that easy. Context, culture, and ethics all matter.</p>
-          <p>You'll face <strong>4 challenging levels</strong> with increasing complexity.</p>
-          <button class="btn btn-primary btn-large" onclick="Game.startLevel(0)">BEGIN CASE 1 →</button>
+          <p>Real cases won't be that easy — context, culture, and ethics all matter. You'll face <strong>4 challenging levels</strong>.</p>
+          <button class="btn btn-primary btn-large" onclick="Game.showLevelMap()">VIEW CASE MAP →</button>
         </div>
         <div class="tut-step" data-step="4b">
           <div class="tut-icon">🤔</div>
           <h3>Think Again</h3>
-          <p>That content is clearly promotional spam with no editorial value. The AI's flag was <strong>correct</strong> here — approve the removal.</p>
+          <p>Clearly promotional spam — the AI's flag was <strong>correct</strong> here.</p>
           <div class="decision-buttons">
             <button class="btn btn-approve" onclick="Game.tutorialDecision('approve')">✅ APPROVE REMOVAL</button>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN: LEVEL MAP ===== -->
+  <div id="screen-levelmap" class="screen">
+    <div class="screen-inner levelmap-inner">
+      <div class="levelmap-header">
+        <div class="badge">AUDIT PROGRESS</div>
+        <h2 class="screen-title">Case <span class="accent">Map</span></h2>
+      </div>
+      <div class="levelmap-path" id="levelmap-path">
+        <!-- Nodes injected by JS -->
+      </div>
+      <button class="btn btn-primary btn-large" id="levelmap-btn" onclick="Game.startNextCase()">START CASE 1 →</button>
     </div>
   </div>
 
@@ -144,6 +157,7 @@
             <span class="prog-dot" data-idx="1"></span>
             <span class="prog-dot" data-idx="2"></span>
             <span class="prog-dot" data-idx="3"></span>
+            <span class="prog-dot" data-idx="4"></span>
           </div>
         </div>
         <div class="hud-center">
@@ -171,6 +185,7 @@
             <span class="platform-badge" id="case-platform">Platform: SocialNet</span>
           </div>
           <div class="case-scenario" id="case-scenario"></div>
+          <div class="case-visual" id="case-visual" style="display:none"></div>
           <div class="case-card elevated">
             <div class="case-label">FLAGGED CONTENT</div>
             <div class="case-content" id="case-content"></div>
