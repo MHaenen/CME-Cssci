@@ -582,11 +582,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Keyboard Shortcuts ─────────────────────────────────────────────────────
   document.addEventListener('keydown', (e) => {
-    // Only fire on game screen, not after decision
+    if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
+
+    // Spacebar advances from feedback or level map screens
+    if (e.key === ' ') {
+      const feedbackActive = document.getElementById('screen-feedback').classList.contains('active');
+      const levelmapActive = document.getElementById('screen-levelmap').classList.contains('active');
+      if (feedbackActive) { e.preventDefault(); document.getElementById('fb-next-btn').click(); return; }
+      if (levelmapActive) { e.preventDefault(); document.getElementById('levelmap-btn').click(); return; }
+    }
+
+    // Only fire decision/tool keys on game screen
     const gameActive = document.getElementById('screen-game').classList.contains('active');
     if (!gameActive) return;
-    // Don't steal input from any focused input elements
-    if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
 
     const buttons = document.querySelectorAll('#decision-buttons button:not(:disabled)');
     if (e.key === '1' && buttons[0]) { e.preventDefault(); buttons[0].click(); return; }
