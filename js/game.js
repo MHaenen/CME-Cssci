@@ -152,7 +152,7 @@ const Game = (() => {
     const display = document.getElementById('timer-display');
     const circle = document.getElementById('timer-circle');
     const ring = document.getElementById('timer-ring');
-    const circumference = 163;
+    const circumference = 107;
 
     function tick() {
       if (state.decisionMade) return;
@@ -317,7 +317,7 @@ const Game = (() => {
     }
 
     document.getElementById('tool-output').innerHTML =
-      `<strong style="color:var(--accent);font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;">${tool.title}</strong><br/><br/>${tool.body}`;
+      `<div class="tool-out-hdr">${tool.title}</div><div class="tool-out-body">${tool.body}</div>`;
   }
 
   function closeModal() {
