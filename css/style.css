@@ -983,6 +983,43 @@ kbd {
   color: var(--red);
 }
 
+.harm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 12px 0;
+}
+.harm-card {
+  padding: 10px 12px;
+  border-radius: 8px;
+  line-height: 1.4;
+}
+.harm-card .harm-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  opacity: 0.85;
+}
+.harm-card .harm-text {
+  font-size: 0.78rem;
+  color: var(--text2);
+}
+.harm-up {
+  background: rgba(255,159,67,0.1);
+  border: 1px solid rgba(255,159,67,0.3);
+}
+.harm-up .harm-label { color: var(--orange); }
+.harm-down {
+  background: rgba(0,212,255,0.08);
+  border: 1px solid rgba(0,212,255,0.2);
+}
+.harm-down .harm-label { color: var(--accent); }
+@media (max-width: 480px) {
+  .harm-grid { grid-template-columns: 1fr; }
+}
+
 .meme-post-mock {
   background: var(--panel2);
   border: 1px solid var(--border);

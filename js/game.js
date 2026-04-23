@@ -360,6 +360,15 @@ const Game = (() => {
     document.getElementById('fb-analysis').textContent = result.analysis;
     document.getElementById('fb-ai-failure').textContent = result.aiFailure;
     document.getElementById('fb-principle').textContent = result.principle;
+
+    const harmGrid = document.getElementById('fb-harm-grid');
+    if (result.harmIfUp || result.harmIfRemoved) {
+      document.getElementById('fb-harm-up').textContent = result.harmIfUp || '—';
+      document.getElementById('fb-harm-down').textContent = result.harmIfRemoved || '—';
+      harmGrid.style.display = 'grid';
+    } else {
+      harmGrid.style.display = 'none';
+    }
     document.getElementById('fb-user-decision').textContent = result.userDecisionLabel;
     document.getElementById('fb-ai-decision').textContent = result.aiDecisionLabel;
 

@@ -43,9 +43,11 @@ const SCENARIOS = [
       reject_flag: {
         correct: true,
         icon: "✅",
-        headline: "Correct Decision",
+        headline: "Best Justified Answer",
         subline: "You protected legitimate political speech",
         ethicalScore: 92,
+        harmIfUp: "A forceful political opinion stays live — no slurs, no threats, no identifiable harm beyond discomfort.",
+        harmIfRemoved: "Democratic criticism of a government is silenced; sets a precedent for removing harsh-but-legitimate political commentary.",
         userDecisionLabel: "Rejected Flag — Post Allowed",
         aiDecisionLabel: "Approved Removal (Incorrect)",
         analysis: `Political commentary targeting public figures, not private individuals — the language is forceful but contains no slurs or threats. The AI incorrectly treated rhetorical intensity as a policy violation.`,
@@ -55,9 +57,11 @@ const SCENARIOS = [
       approve_removal: {
         correct: false,
         icon: "❌",
-        headline: "Incorrect Decision",
+        headline: "Weakest Justification",
         subline: "You reinforced the AI's bias against political speech",
         ethicalScore: 28,
+        harmIfUp: "Forceful political speech stays up — no personal attack, no real harm.",
+        harmIfRemoved: "Valid democratic criticism is silenced; platforms become tools for protecting governments from public accountability.",
         userDecisionLabel: "Approved Removal",
         aiDecisionLabel: "Approved Removal (Also Incorrect)",
         analysis: `This post targets government policy and politicians — public figures subject to sharp criticism. No slurs, threats, or harassment were present; removing it silences valid democratic discourse.`,
@@ -67,9 +71,11 @@ const SCENARIOS = [
       challenge: {
         correct: false,
         icon: "⚠️",
-        headline: "Partially Correct",
+        headline: "Defensible but Overcautious",
         subline: "Good instinct, but a direct decision was possible here",
         ethicalScore: 65,
+        harmIfUp: "Post stays up while awaiting review — minimal harm given the content type.",
+        harmIfRemoved: "Escalation delays a clear decision, creating uncertainty and potential for the post to be removed in the interim.",
         userDecisionLabel: "Challenged AI — Requested Review",
         aiDecisionLabel: "Approved Removal (Incorrect)",
         analysis: `Good instinct, but the Content Analyzer confirmed no threats and the Ethical Guidelines explicitly cover this scenario — enough evidence for a direct decision.`,
@@ -88,120 +94,125 @@ const SCENARIOS = [
     platform: "Platform: MemeBoard",
     flagReason: "FLAGGED: Hate Speech",
     timeLimit: 120,
-    scenario: `A satirical cartoon of a senator received 1,200 reports and was flagged as hate speech. Is this political satire or genuine hate speech?`,
-    content: `[Image: Cartoon caricature of Senator James Holt with exaggerated features, holding a bag of money] Caption: "Senator Holt's new economic policy: Take from the poor, give to the yacht." — @PoliticalComics`,
-    aiDecision: `Flagged: Hate Speech (Class 2). Confidence: 71%. Trigger: high report volume + "mockery of individual" classifier.`,
+    scenario: `A cartoon of Rep. Aria Chen — an Asian-American congresswoman — uses ethnic caricature (conical hat, chopsticks, slanted-eye exaggeration) to mock her trade vote. Is this political satire or racial hate speech?`,
+    content: `[Image: Cartoon of Rep. Aria Chen with exaggerated ethnic features — conical hat, chopsticks, "FREE TRADE" banner] Caption: "Rep. Chen sells out American workers — straight from Beijing." — @PatriotMemes`,
+    aiDecision: `Flagged: Hate Speech (Class 2). Confidence: 68%. Trigger: ethnic identifier in image classifier + 1,200 reports.`,
     visual: `<div class="meme-post-mock">
   <div class="spm-header">
-    <div class="spm-avatar" style="background:linear-gradient(135deg,#ff6b35,#f7c59f)">PC</div>
+    <div class="spm-avatar" style="background:linear-gradient(135deg,#cc2200,#ff6b35)">PM</div>
     <div class="spm-meta">
-      <span class="spm-name">PoliticalComics</span>
-      <span class="spm-handle">@PoliticalComics &middot; MemeBoard</span>
+      <span class="spm-name">PatriotMemes</span>
+      <span class="spm-handle">@PatriotMemes &middot; MemeBoard</span>
     </div>
   </div>
   <div class="mpm-cartoon-frame">
-    <svg viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg" style="max-width:180px;height:auto;display:block;margin:0 auto">
-      <rect width="180" height="200" fill="#fdf8ee" rx="4"/>
-      <rect x="6" y="6" width="168" height="188" fill="none" stroke="#c8b89a" stroke-width="1" rx="2" stroke-dasharray="4,3"/>
-      <ellipse cx="90" cy="50" rx="34" ry="14" fill="#1a1a1a"/>
-      <ellipse cx="90" cy="72" rx="34" ry="40" fill="#f2b97a" stroke="#1a0f00" stroke-width="2"/>
-      <rect x="56" y="50" width="68" height="14" fill="#1a1a1a"/>
-      <ellipse cx="57" cy="74" rx="7" ry="10" fill="#e8a86e" stroke="#1a0f00" stroke-width="1.5"/>
-      <ellipse cx="123" cy="74" rx="7" ry="10" fill="#e8a86e" stroke="#1a0f00" stroke-width="1.5"/>
-      <ellipse cx="78" cy="70" rx="9" ry="6" fill="white" stroke="#1a0f00" stroke-width="1.5"/>
-      <ellipse cx="102" cy="70" rx="9" ry="6" fill="white" stroke="#1a0f00" stroke-width="1.5"/>
-      <circle cx="80" cy="71" r="4" fill="#1a0f00"/>
-      <circle cx="104" cy="71" r="4" fill="#1a0f00"/>
-      <line x1="69" y1="65" x2="87" y2="65" stroke="#1a0f00" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="93" y1="65" x2="111" y2="65" stroke="#1a0f00" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M69 59 Q78 54 87 58" stroke="#1a0f00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M93 57 Q102 53 111 57" stroke="#1a0f00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <ellipse cx="90" cy="82" rx="11" ry="9" fill="#e8a06a" stroke="#1a0f00" stroke-width="1.5"/>
-      <circle cx="85" cy="84" r="3" fill="#d08050"/>
-      <circle cx="95" cy="84" r="3" fill="#d08050"/>
-      <path d="M73 99 Q90 114 107 99" stroke="#1a0f00" stroke-width="2.5" fill="#c06060" stroke-linecap="round"/>
-      <path d="M75 101 Q90 111 105 101 Q90 106 75 101" fill="#c06060"/>
-      <rect x="82" y="110" width="16" height="12" fill="#f2b97a" stroke="#1a0f00" stroke-width="1.5"/>
-      <rect x="50" y="120" width="80" height="72" rx="4" fill="#1e3a6e" stroke="#1a0f00" stroke-width="2"/>
-      <polygon points="90,120 66,134 70,192" fill="#f0ede8"/>
-      <polygon points="90,120 114,134 110,192" fill="#f0ede8"/>
-      <polygon points="86,126 94,126 97,160 90,168 83,160" fill="#cc1a00" stroke="#aa1000" stroke-width="1"/>
-      <rect x="24" y="124" width="28" height="14" rx="7" fill="#1e3a6e" stroke="#1a0f00" stroke-width="1.5" transform="rotate(25,38,131)"/>
-      <circle cx="22" cy="144" r="8" fill="#f2b97a" stroke="#1a0f00" stroke-width="1.5"/>
-      <rect x="128" y="124" width="28" height="14" rx="7" fill="#1e3a6e" stroke="#1a0f00" stroke-width="1.5" transform="rotate(-20,142,131)"/>
-      <circle cx="154" cy="152" r="18" fill="#f5c518" stroke="#1a0f00" stroke-width="2"/>
-      <path d="M144 135 Q154 126 164 135" stroke="#1a0f00" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <text x="154" y="158" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a0f00" font-family="Georgia,serif">$</text>
-      <rect x="10" y="174" width="114" height="20" rx="3" fill="white" stroke="#cc1a00" stroke-width="1.5"/>
-      <text x="67" y="188" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#1a0f00" font-family="Arial,sans-serif">Sen. James Holt (R)</text>
+    <svg viewBox="0 0 180 210" xmlns="http://www.w3.org/2000/svg" style="max-width:180px;height:auto;display:block;margin:0 auto">
+      <rect width="180" height="210" fill="#fdf8ee" rx="4"/>
+      <rect x="6" y="6" width="168" height="198" fill="none" stroke="#c8b89a" stroke-width="1" rx="2" stroke-dasharray="4,3"/>
+      <polygon points="90,10 58,64 122,64" fill="#cc2200" stroke="#1a0f00" stroke-width="2"/>
+      <line x1="58" y1="64" x2="122" y2="64" stroke="#1a0f00" stroke-width="2"/>
+      <ellipse cx="90" cy="82" rx="28" ry="30" fill="#f5d5a0" stroke="#1a0f00" stroke-width="2"/>
+      <ellipse cx="62" cy="84" rx="6" ry="8" fill="#ecc890" stroke="#1a0f00" stroke-width="1.5"/>
+      <ellipse cx="118" cy="84" rx="6" ry="8" fill="#ecc890" stroke="#1a0f00" stroke-width="1.5"/>
+      <ellipse cx="78" cy="79" rx="11" ry="4" fill="white" stroke="#1a0f00" stroke-width="2"/>
+      <ellipse cx="102" cy="79" rx="11" ry="4" fill="white" stroke="#1a0f00" stroke-width="2"/>
+      <line x1="67" y1="76" x2="89" y2="80" stroke="#1a0f00" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="91" y1="76" x2="113" y2="80" stroke="#1a0f00" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="79" cy="79" r="4" fill="#1a0f00"/>
+      <circle cx="103" cy="79" r="4" fill="#1a0f00"/>
+      <path d="M67 73 Q78 68 89 72" stroke="#1a0f00" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M91 72 Q102 67 113 71" stroke="#1a0f00" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="90" cy="88" rx="7" ry="5" fill="#e8b880" stroke="#1a0f00" stroke-width="1.5"/>
+      <path d="M80 98 Q90 106 100 98" stroke="#1a0f00" stroke-width="2" fill="#c06060" stroke-linecap="round"/>
+      <line x1="66" y1="90" x2="114" y2="98" stroke="#8B4513" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="68" y1="95" x2="116" y2="103" stroke="#8B4513" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="84" y="110" width="12" height="10" fill="#f5d5a0" stroke="#1a0f00" stroke-width="1.5"/>
+      <rect x="55" y="118" width="70" height="68" rx="4" fill="#1a5c3a" stroke="#1a0f00" stroke-width="2"/>
+      <polygon points="90,118 68,130 72,186" fill="#f0ede8"/>
+      <polygon points="90,118 112,130 108,186" fill="#f0ede8"/>
+      <polygon points="86,124 94,124 97,156 90,164 83,156" fill="#c9a227" stroke="#a88010" stroke-width="1"/>
+      <rect x="22" y="122" width="30" height="12" rx="6" fill="#1a5c3a" stroke="#1a0f00" stroke-width="1.5" transform="rotate(20,37,128)"/>
+      <rect x="128" y="120" width="30" height="12" rx="6" fill="#1a5c3a" stroke="#1a0f00" stroke-width="1.5" transform="rotate(-15,143,126)"/>
+      <rect x="136" y="100" width="38" height="26" rx="3" fill="#f5f0e0" stroke="#cc2200" stroke-width="1.5"/>
+      <text x="155" y="114" text-anchor="middle" font-size="8" font-weight="bold" fill="#cc2200" font-family="Arial,sans-serif">FREE</text>
+      <text x="155" y="123" text-anchor="middle" font-size="8" font-weight="bold" fill="#cc2200" font-family="Arial,sans-serif">TRADE</text>
+      <line x1="136" y1="113" x2="136" y2="142" stroke="#8B4513" stroke-width="2"/>
+      <rect x="8" y="188" width="124" height="18" rx="3" fill="white" stroke="#cc1a00" stroke-width="1.5"/>
+      <text x="70" y="201" text-anchor="middle" font-size="9" font-weight="bold" fill="#1a0f00" font-family="Arial,sans-serif">Rep. Aria Chen (D)</text>
     </svg>
   </div>
-  <div class="mpm-caption">&ldquo;Senator Holt&rsquo;s new economic policy: Take from the poor, give to the yacht.&rdquo;</div>
-  <div class="spm-stats"><span>&#128172; 4.2K</span><span>&#128257; 12K</span><span>&#10084; 31K</span></div>
-  <div class="spm-flag-bar">&#128680; ModAI &mdash; Flagged: Hate Speech &middot; 1,200 reports &middot; Confidence: 71%</div>
+  <div class="mpm-caption">&ldquo;Rep. Chen sells out American workers &mdash; straight from Beijing.&rdquo;</div>
+  <div class="spm-stats"><span>&#128172; 8.7K</span><span>&#128257; 22K</span><span>&#10084; 51K</span></div>
+  <div class="spm-flag-bar">&#128680; ModAI &mdash; Flagged: Hate Speech &middot; 1,200 reports &middot; Confidence: 68%</div>
 </div>`,
     tools: {
       analyzer: {
         title: "📊 Content Analyzer",
-        body: `<strong>Content Type:</strong> Political cartoon targeting an elected official<br/><br/>
-<strong>Hateful elements:</strong><ul><li>Slurs: None</li><li>Incitement: None</li><li>Protected characteristics attacked: None</li></ul><strong>Report analysis:</strong> 89% of 1,200 reports came from accounts that recently followed Senator Holt's page — coordinated campaign detected.<br/><br/>
-<strong>Account pattern:</strong> @PoliticalComics matches established political satire publications.`
+        body: `<strong>Content Type:</strong> Political cartoon — elected official<br/><br/>
+<strong>Hateful elements:</strong><ul><li>Slurs in caption: None</li><li>Ethnic stereotypes in image: <strong style="color:var(--red)">Yes — conical hat, chopsticks, exaggerated eye shape</strong></li><li>Protected characteristic targeted: National origin / ethnicity</li></ul><strong>Caption:</strong> "Straight from Beijing" implies foreign loyalty based on ethnicity, not policy argument.<br/><br/>
+<strong>Report pattern:</strong> 1,200 reports — organic spread, no single-source coordination detected.`
       },
       ethics: {
         title: "📜 Ethical Guidelines",
-        body: `<strong>Satire vs Hate Speech:</strong> Satire mocks a person's <em>actions or policies</em>. Hate speech attacks a person's <em>protected identity</em>. This cartoon targets policy, not identity.<br/><br/>
-<strong>Report-Volume Bias:</strong> Coordinated mass-reporting is a known manipulation tactic — volume of reports alone must never determine a moderation decision.<br/><br/>
-<strong>Guideline §7.1:</strong> Political cartoons targeting public figures on matters of public interest are explicitly protected.`
+        body: `<strong>The satire test:</strong> Could you remove the ethnic stereotypes and still make the political point? <em>Yes</em> — therefore the stereotypes are not satire; they are ethnic mockery attached to a political argument.<br/><br/>
+<strong>Satire vs Hate Speech:</strong> Satire criticises <em>what a person does</em>. Content that relies on racial/ethnic visual tropes to function targets <em>who a person is</em> — a protected characteristic.<br/><br/>
+<strong>Guideline §7.1:</strong> Public figure status does not grant immunity from hate speech protections based on ethnicity or national origin.`
       },
       ai: {
         title: "🤖 ModAI Reasoning Log",
-        body: `<strong>Model:</strong> ReportClassifier v2.1 + SentimentMock Detector<br/><br/>
-<strong>Process:</strong><ul><li>Report threshold exceeded (>500) → elevated to hate speech review</li><li>No satire classifier active for image content</li><li>Cannot distinguish public figures from private citizens</li></ul><strong>Critical Bias:</strong> False positive rate for satire: ~61%. Vulnerable to coordinated reporting campaigns.`
+        body: `<strong>Model:</strong> ReportClassifier v2.1 + EthnicDetector v1.0 (beta)<br/><br/>
+<strong>Process:</strong><ul><li>Ethnic identifier flagged in image → elevated to hate speech review</li><li>Report volume threshold exceeded (>500)</li><li>No satire vs hate speech distinction applied</li></ul><strong>Note:</strong> ModAI reached the right flag — but primarily through report volume, not image content analysis. Identical content with fewer reports would have been missed. Right outcome, wrong reasoning.`
       }
     },
     options: [
-      { label: "✅ APPROVE — It's Political Satire", style: "btn-approve", value: "approve" },
-      { label: "❌ REMOVE — It's Hate Speech", style: "btn-reject", value: "remove" },
-      { label: "⚠️ CHALLENGE — Distinguish Satire Rules", style: "btn-challenge", value: "challenge" }
+      { label: "❌ REJECT FLAG — It's Political Satire", style: "btn-reject", value: "reject_flag" },
+      { label: "✅ APPROVE REMOVAL — Racial Hate Speech", style: "btn-approve", value: "approve_removal" },
+      { label: "⚠️ RESTRICT — Add Label, Reduce Reach", style: "btn-challenge", value: "restrict" }
     ],
-    correctAnswer: "approve",
-    partialAnswers: ["challenge"],
+    correctAnswer: "approve_removal",
+    partialAnswers: ["restrict"],
     results: {
-      approve: {
-        correct: true,
-        icon: "✅",
-        headline: "Correct — Protected Satire",
-        subline: "You identified a coordinated false-reporting attack",
-        ethicalScore: 95,
-        userDecisionLabel: "Approved — Political Satire",
-        aiDecisionLabel: "Flagged as Hate Speech (Wrong)",
-        analysis: `Classic political satire — no slurs, no attacks on protected characteristics, no incitement. The 1,200 reports were a coordinated campaign by the senator's supporters; the AI failed to recognise either the satire or the manipulation.`,
-        aiFailure: `ReportClassifier uses raw report volume as a hate speech signal — making it trivially exploitable by organised groups to silence political critics.`,
-        principle: `Satirical caricature of elected officials on matters of public interest has been protected political expression for centuries. Target type and subject matter are decisive.`
-      },
-      remove: {
+      reject_flag: {
         correct: false,
         icon: "❌",
-        headline: "Incorrect — You Suppressed Satire",
-        subline: "You fell for a coordinated false-reporting campaign",
-        ethicalScore: 15,
-        userDecisionLabel: "Removed as Hate Speech",
-        aiDecisionLabel: "Also Flagged (Both Wrong)",
-        analysis: `This was political satire — by approving removal you allowed a coordinated campaign to silence a legitimate critic. The Content Analyzer clearly flagged the suspicious reporting pattern.`,
-        aiFailure: `Both ModAI and your decision failed to detect the coordinated false-reporting attack, treating volume as a reliable hate speech signal.`,
-        principle: `Hate speech targets who someone is. Satire targets what someone does. This fundamental distinction must guide every moderation decision.`
+        headline: "Weakest Justification — Ethnic Harm Overlooked",
+        subline: "Policy satire is protected. Ethnic mockery is not.",
+        ethicalScore: 10,
+        harmIfUp: "Racial stereotyping of politicians normalises ethnic mockery and signals it is acceptable political commentary.",
+        harmIfRemoved: "N/A — rejecting the flag keeps harmful content live.",
+        userDecisionLabel: "Rejected Flag — Cartoon Kept",
+        aiDecisionLabel: "Flagged as Hate Speech (Correct outcome)",
+        analysis: `The political argument could have been made without a single ethnic stereotype — the conical hat, chopsticks, and "Beijing" caption do not critique her trade vote; they mock her ethnicity. This is where satire becomes hate speech.`,
+        aiFailure: `ModAI correctly flagged this — but primarily due to report volume. A sound moderation decision must be grounded in the content itself, not how many people reported it.`,
+        principle: `The test is simple: remove the stereotypes — does the political point survive? If yes, the stereotypes were hate, not satire. Public figures are not exempt from ethnic discrimination protections.`
       },
-      challenge: {
+      approve_removal: {
+        correct: true,
+        icon: "✅",
+        headline: "Best Justified Answer",
+        subline: "You distinguished policy satire from ethnic mockery",
+        ethicalScore: 95,
+        harmIfUp: "Ethnic stereotyping of elected officials normalises racial mockery and discourages minority representation in public life.",
+        harmIfRemoved: "A cartoon is removed — but one whose argument relied on ethnic dehumanisation, not policy critique.",
+        userDecisionLabel: "Approved Removal — Racial Hate Speech",
+        aiDecisionLabel: "Flagged as Hate Speech (Right result, weak reasoning)",
+        analysis: `The cartoon uses ethnic visual stereotypes — conical hat, chopsticks, slanted-eye exaggeration — that dehumanise based on national origin. "Straight from Beijing" implies ethnic disloyalty, not policy disagreement. The satire label does not protect content whose core mechanism is racial mockery.`,
+        aiFailure: `ModAI reached the right outcome but flagged based on volume, not ethnic content analysis. This matters: it means identical content with fewer reports would pass through — a systemic failure disguised as a correct decision.`,
+        principle: `The decisive question: does the mockery target what this person does, or who they are? Ethnic caricature answers that clearly. Satire of policy is protected. Satire that requires dehumanising someone's ethnicity to work is hate speech.`
+      },
+      restrict: {
         correct: false,
         icon: "⚠️",
-        headline: "Partially Correct",
-        subline: "Good instinct on ambiguity, but evidence pointed to a clear answer",
-        ethicalScore: 68,
-        userDecisionLabel: "Challenged — Requested Satire Framework Review",
-        aiDecisionLabel: "Flagged as Hate Speech (Wrong)",
-        analysis: `Good awareness of the satire distinction, but the tools provided clear evidence: no protected characteristics attacked, public figure target, and coordinated reporting detected.`,
-        aiFailure: `ModAI's satire blindness is a critical systemic flaw, but the individual case had enough evidence for a definitive ruling without escalation.`,
-        principle: `Coordinated-reporting detection in the Content Analyzer provided sufficient grounds to decide without escalating.`
+        headline: "Defensible but Incomplete",
+        subline: "Ethnic hate speech requires removal, not a label",
+        ethicalScore: 48,
+        harmIfUp: "Hate speech content remains partially visible — a label does not undo ethnic mockery.",
+        harmIfRemoved: "Reducing reach limits harm but the content persists for some audiences.",
+        userDecisionLabel: "Restricted — Label Added, Reach Reduced",
+        aiDecisionLabel: "Full Removal (More Decisive)",
+        analysis: `Showing caution is defensible, but content that relies on ethnic stereotyping to make its point does not meet the threshold for labelling — it meets the threshold for removal. A "satire label" on racial caricature misrepresents what the content actually is.`,
+        aiFailure: `ModAI's full removal was the more justified outcome here, even though its reasoning (report volume) was flawed.`,
+        principle: `Restrict and label is appropriate for ambiguous borderline content. Ethnic caricature that would demean any person of that background is not borderline.`
       }
     }
   },
@@ -270,9 +281,11 @@ const SCENARIOS = [
       label: {
         correct: true,
         icon: "✅",
-        headline: "Optimal Decision",
+        headline: "Best Justified Answer",
         subline: "Balanced free expression with responsible information context",
         ethicalScore: 97,
+        harmIfUp: "Post stays with an official context note — readers see both the personal account and the verified figure, improving information quality.",
+        harmIfRemoved: "N/A — post is kept; only a label is added.",
         userDecisionLabel: "Add Context Label — Keep Post",
         aiDecisionLabel: "Full Removal (Incorrect)",
         analysis: `Adding a context note ("Official inflation: 3.2% — source: Gov") informs readers without silencing the poster — the gold standard for grey-area misinformation cases.`,
@@ -282,9 +295,11 @@ const SCENARIOS = [
       reject_flag: {
         correct: false,
         icon: "⚠️",
-        headline: "Mostly Correct",
-        subline: "You protected opinion, but missed the best action",
+        headline: "Defensible but Incomplete",
+        subline: "You protected opinion, but missed the better action",
         ethicalScore: 78,
+        harmIfUp: "Post stays live with no context — readers cannot easily distinguish personal anecdote from verified data.",
+        harmIfRemoved: "N/A — post is kept fully.",
         userDecisionLabel: "Rejected Flag — No Action",
         aiDecisionLabel: "Full Removal (Incorrect)",
         analysis: `Rejecting the flag correctly keeps the post, but the optimal action is a context label that adds information quality without restricting speech.`,
@@ -294,9 +309,11 @@ const SCENARIOS = [
       approve_removal: {
         correct: false,
         icon: "❌",
-        headline: "Incorrect — Opinion Wrongly Removed",
+        headline: "Weakest Justification — Opinion Wrongly Removed",
         subline: "You made the AI a tool for suppressing dissent",
         ethicalScore: 10,
+        harmIfUp: "Personal economic opinion remains — no demonstrable direct harm.",
+        harmIfRemoved: "Economic scepticism is silenced; platforms become censorship tools for official government narratives.",
         userDecisionLabel: "Approved Removal",
         aiDecisionLabel: "Approved Removal (Both Wrong)",
         analysis: `This post expresses personal scepticism about government statistics — a topic debated by economists worldwide. Removing it for contradicting official data is censorship, not moderation.`,
@@ -315,70 +332,78 @@ const SCENARIOS = [
     platform: "Platform: CommunityHub",
     flagReason: "FLAGGED: Privacy Violation",
     timeLimit: 120,
-    scenario: `A consumer shared their billing dispute screenshot — including their own name, account number, and the agent's first name — to expose billing fraud. The AI flagged it as a privacy violation.`,
+    scenario: `A consumer posted her billing fraud evidence — her own data plus an employee's first name and initial. The post went viral with 47,000 shares. The employee was cross-referenced, identified, and received 200+ threatening messages. The AI flagged it for privacy. Does consumer accountability justify third-party harm?`,
     content: `"Sharing my experience with @TelecomCorp because others need to know this is happening. They billed me £340 for services I never received. Here's my full chat log — note how the agent (James W.) admitted it was their error but refused to refund. [Screenshot: Chat showing user's name 'Sarah M.', account #5529341, agent 'James W.' admitting billing error and refusing refund]"`,
     aiDecision: `Flagged: Privacy Violation — Class 2. Confidence: 88%. Trigger: name, account number, and third-party name detected.`,
     tools: {
       analyzer: {
         title: "📊 Content Analyzer",
         body: `<strong>Data elements detected:</strong><ul><li>User's own name (Sarah M.) — <em>self-disclosed by poster</em></li><li>User's account number (#5529341) — <em>self-disclosed by poster</em></li><li>Employee name (James W.) — first name + initial, professional capacity</li></ul><strong>Purpose:</strong> Consumer complaint / public accountability<br/><br/>
-<strong>Precedent:</strong> 94% of similar posts ruled fair use on major platforms.`
+<strong>Viral impact:</strong> 47,000 shares. Cross-referencing "James W." + "TelecomCorp" returned a LinkedIn profile within hours. Employee has since received 200+ threatening messages and taken emergency leave.<br/><br/>
+<strong>Precedent:</strong> Consumer complaints with employee names ruled fair use in 94% of cases — but courts have also found liability where foreseeable harassment resulted.`
       },
       ethics: {
         title: "📜 Ethical Guidelines",
-        body: `<strong>Data Ownership:</strong> Individuals have the right to share their own personal data. Sharing your own name and account number is self-determination, not a privacy violation.<br/><br/>
-<strong>Consumer Advocacy:</strong> Sharing documented evidence of corporate misconduct serves clear public interest — a well-established fair use category.<br/><br/>
-<strong>Guideline §12.4:</strong> Consumer complaints sharing one's own data and partial employee identifiers in a professional context are protected.`
+        body: `<strong>Self-disclosure:</strong> Sarah's right to share her own name and account number is valid — self-determination, not a privacy violation.<br/><br/>
+<strong>Third-party harm:</strong> "James W." did not consent to public identification. At viral scale, a first name + initial + employer became sufficient to identify and target him. His professional capacity does not remove his right to physical safety.<br/><br/>
+<strong>Minimum intervention principle:</strong> The fraud evidence (chat log, admission) remains fully intact without the employee's name. Redacting it protects a real person without suppressing the public interest disclosure.<br/><br/>
+<strong>Guideline §12.4:</strong> When consumer accountability posts foreseeably cause third-party harm, redaction of identifying details is the proportionate response.`
       },
       ai: {
         title: "🤖 ModAI Reasoning Log",
         body: `<strong>Model:</strong> PIIDetector v4.2<br/><br/>
-<strong>Process:</strong><ul><li>Detected: name, account number, third-party name → automatic high-confidence flag</li><li>No ownership analysis — cannot determine if poster is sharing their own data</li><li>No purpose or context analysis</li></ul><strong>Critical Flaw:</strong> Cannot distinguish doxxing from self-disclosure — systematically protects corporations from consumer complaints.`
+<strong>Process:</strong><ul><li>Detected: name, account number, third-party name → automatic high-confidence flag</li><li>No ownership analysis — cannot determine if poster is sharing their own data</li><li>No viral impact or harm assessment performed</li></ul><strong>Critical Flaw:</strong> PIIDetector cannot distinguish doxxing from self-disclosure, and cannot assess real-world harm from viral spread. Its blunt full-removal response would silence the fraud complaint entirely — protecting the corporation, not the employee.`
       }
     },
     options: [
-      { label: "✅ REJECT FLAG — Allow Consumer Complaint", style: "btn-approve", value: "reject_flag" },
+      { label: "✅ REJECT FLAG — Allow Post Fully", style: "btn-approve", value: "reject_flag" },
       { label: "❌ APPROVE REMOVAL — Privacy Violation", style: "btn-reject", value: "approve_removal" },
-      { label: "✏️ PARTIAL — Keep Post, Redact Account Number", style: "btn-challenge", value: "partial" }
+      { label: "✏️ PARTIAL — Keep Post, Redact Employee Name", style: "btn-challenge", value: "partial" }
     ],
-    correctAnswer: "reject_flag",
-    partialAnswers: ["partial"],
+    correctAnswer: "partial",
+    partialAnswers: ["reject_flag"],
     results: {
       reject_flag: {
-        correct: true,
-        icon: "✅",
-        headline: "Correct — Consumer Advocacy Protected",
-        subline: "You prevented AI from being weaponised against consumers",
-        ethicalScore: 94,
-        userDecisionLabel: "Rejected Flag — Post Allowed",
-        aiDecisionLabel: "Full Removal (Incorrect)",
-        analysis: `The poster shares their own data, partial employee info in a professional context, and documented evidence of billing fraud. Removing this post would silence a valid public interest disclosure and protect a corporation from accountability.`,
-        aiFailure: `PIIDetector v4.2 cannot answer the most important question: whose data is this, and why is it being shared? It becomes a tool corporations exploit to silence consumer complaints.`,
-        principle: `Privacy law distinguishes self-disclosure from privacy violation. Consumer accountability is a core public interest function — no intervention required here.`
+        correct: false,
+        icon: "⚠️",
+        headline: "Defensible — But Overlooks Third-Party Harm",
+        subline: "Consumer advocacy is valid. James W.'s safety also matters.",
+        ethicalScore: 65,
+        harmIfUp: "James W. remains identifiable at viral scale — ongoing harassment risk for an individual who had no meaningful choice in being named.",
+        harmIfRemoved: "N/A — post stays up fully.",
+        userDecisionLabel: "Rejected Flag — Post Kept in Full",
+        aiDecisionLabel: "Full Removal (Overcorrection)",
+        analysis: `Sarah's right to share her own data is valid, and the fraud evidence serves genuine public interest. But at 47,000 shares, "James W." at TelecomCorp became a findable, harassable individual. The fraud complaint survives completely without his name — the minimum intervention principle applies.`,
+        aiFailure: `ModAI's full removal was a clear overcorrection — but no action at all ignores a foreseeable harm that has already materialised.`,
+        principle: `Protecting free expression does not require accepting avoidable third-party harm. When the same public interest goal can be achieved without exposing an individual to danger, that is the better choice.`
       },
       approve_removal: {
         correct: false,
         icon: "❌",
-        headline: "Incorrect — Consumer Silenced",
-        subline: "You allowed the AI to protect corporate misconduct",
-        ethicalScore: 12,
-        userDecisionLabel: "Approved Removal",
-        aiDecisionLabel: "Approved Removal (Both Incorrect)",
-        analysis: `This person documented billing fraud using their own data. Removing the post doesn't protect privacy — it protects the corporation from accountability.`,
-        aiFailure: `Both ModAI and your decision confused self-disclosure with privacy violation — a systemic bias that consistently advantages institutions over individual users.`,
-        principle: `Privacy protection exists to protect people from harm. Removing a consumer's own fraud complaint inverts this purpose entirely.`
+        headline: "Overcorrection — Consumer Silenced",
+        subline: "Protecting the employee does not require protecting the corporation",
+        ethicalScore: 14,
+        harmIfUp: "N/A — full removal applied.",
+        harmIfRemoved: "Sarah's fraud evidence disappears entirely. TelecomCorp escapes public accountability. The public cannot be warned.",
+        userDecisionLabel: "Approved Removal — Post Deleted",
+        aiDecisionLabel: "Approved Removal (Both Overcorrected)",
+        analysis: `Removing the post entirely protects TelecomCorp, not James W. The fraud evidence and Sarah's account number have nothing to do with the employee's safety — a targeted redaction was the proportionate response.`,
+        aiFailure: `Both ModAI and your decision used a sledgehammer where a scalpel was needed. The employee's name could be redacted without destroying Sarah's public interest disclosure.`,
+        principle: `Privacy protection should be proportionate to the harm. Full removal when partial redaction achieves the same protective goal is not moderation — it is suppression.`
       },
       partial: {
-        correct: false,
-        icon: "⚠️",
-        headline: "Reasonable but Not Optimal",
-        subline: "Showed good instinct, but unnecessary restriction",
-        ethicalScore: 72,
-        userDecisionLabel: "Partial Action — Redact Account Number",
-        aiDecisionLabel: "Full Removal (More Restrictive)",
-        analysis: `Thoughtful approach — but the user chose to share their own account number as evidence, and that is their right. Full approval was the correct decision.`,
-        aiFailure: `ModAI's full removal was far more harmful than your partial action, but even minimum intervention was unnecessary here.`,
-        principle: `When a person is fully within their rights to share information they own, no intervention is required.`
+        correct: true,
+        icon: "✅",
+        headline: "Best Justified Answer",
+        subline: "You balanced consumer accountability with third-party safety",
+        ethicalScore: 96,
+        harmIfUp: "Fraud evidence preserved for public accountability — employee name redacted, harassment risk reduced.",
+        harmIfRemoved: "Employee's identifying details removed — James W.'s safety protected without silencing Sarah's complaint.",
+        userDecisionLabel: "Partial Action — Employee Name Redacted",
+        aiDecisionLabel: "Full Removal (Disproportionate)",
+        analysis: `The fraud evidence is intact — chat log, billing admission, Sarah's own data — all preserved. Only the detail that enabled a specific individual to be targeted and harassed is removed. This is the minimum intervention that serves both consumer accountability and personal safety.`,
+        aiFailure: `PIIDetector v4.2 has no partial-redaction capability — it can only remove or keep. This binary design systematically forces overcorrection in cases that require nuance.`,
+        principle: `The best moderation decisions protect multiple legitimate interests simultaneously. Consumer accountability and individual safety are not opposites — a well-scoped redaction serves both.`
       }
     }
   },
@@ -392,9 +417,9 @@ const SCENARIOS = [
     platform: "Platform: StreamVote",
     flagReason: "FLAGGED: Incitement to Violence",
     timeLimit: 120,
-    scenario: `A climate activist's rally speech was auto-flagged after 847 reports. The AI detected "aggressive tone" and phrases like "fight back" and "you won't get away with this." Is this protected political speech or incitement?`,
-    content: `[Video] Activist addresses thousands at public rally: "You have stolen my dreams with your empty words. I want you to panic — our house is on fire. We will fight back at the ballot box and in the streets. You're failing us, and you will not get away with this."`,
-    aiDecision: `Flagged: Incitement to Violence — Class 3. Confidence: 73%. Trigger: "fight back," "panic," "you won't get away" — high-aggression cluster.`,
+    scenario: `A climate activist's rally speech ends with a call to show up at a specific oil company's headquarters "every day until they hear us." It was auto-flagged after 847 reports. Is this protected protest organising or targeted harassment/incitement?`,
+    content: `[Video] Activist addresses thousands: "You have stolen our future with empty words. I want you to panic — our house is on fire. We will fight back. And I am calling on every single one of you: show up at FossilFuel Corp's headquarters on Meridian Street every single day until they hear us. Make them feel the pressure. They will not get away with this."`,
+    aiDecision: `Flagged: Incitement to Violence — Class 3. Confidence: 81%. Trigger: "fight back," "show up," "make them feel the pressure" — high-aggression + location targeting cluster.`,
     visual: `<div class="video-mock-wrap">
   <div class="vm-player">
     <div class="vm-bg">
@@ -420,21 +445,24 @@ const SCENARIOS = [
     tools: {
       analyzer: {
         title: "📊 Content Analyzer",
-        body: `<strong>Flagged phrases:</strong><ul><li>"fight back" — metaphorical political call-to-action, no specific target</li><li>"panic" — emotional appeal, not a threat</li><li>"you won't get away" — accountability rhetoric, directed at institutions</li></ul><strong>Context:</strong> Public rally, 3 years old, no related incidents recorded.<br/><br/><strong>Report pattern:</strong> 74% of 847 reports submitted within 2 hours — coordinated campaign likely.`
+        body: `<strong>Flagged phrases:</strong><ul><li>"fight back" — political call-to-action, no specific person targeted</li><li>"show up at FossilFuel Corp's headquarters on Meridian Street" — <strong>specific location named</strong></li><li>"make them feel the pressure" — ambiguous: could be legitimate protest pressure or intimidation</li><li>"won't get away" — accountability rhetoric, directed at a corporation</li></ul><strong>Context:</strong> Public rally, organised protest movement, no incidents of violence linked to this speech.<br/><br/><strong>Report pattern:</strong> 74% of 847 reports submitted within 2 hours — coordinated campaign likely. However, 26% appear organic.`
       },
       ethics: {
         title: "📜 Ethical Guidelines",
-        body: `<strong>Incitement (legal standard):</strong> Must be directed at a specific person/group, likely to produce <em>imminent</em> lawless action, and intended to cause it. None of these thresholds are met here.<br/><br/><strong>Political speech:</strong> Passion and urgency are features of all protected political discourse — not indicators of incitement.<br/><br/><strong>Guideline §14.1:</strong> Rally speeches by activists on policy matters are presumptively protected political expression.`
+        body: `<strong>Incitement (legal standard):</strong> Must be directed at specific persons, likely to produce <em>imminent</em> lawless action, and intended to cause it.<br/><br/>
+<strong>The hard question here:</strong> Calling people to physically show up at a named location <em>is</em> more specific than general protest rhetoric — but "show up" is classic protest organising (pickets, demonstrations), not a call to violence.<br/><br/>
+<strong>Key distinction:</strong> "Show up and protest" ≠ "show up and attack." No property destruction, assault, or unlawful action is called for. Corporate buildings at business addresses are legitimate protest targets.<br/><br/>
+<strong>Guideline §14.1:</strong> Organising physical protests at locations of public business activity is presumptively protected, absent a specific call to illegal action.`
       },
       ai: {
         title: "🤖 ModAI Reasoning Log",
-        body: `<strong>Model:</strong> ThreatDetect v5.1 + Report-Aggregator<br/><br/><strong>Process:</strong><ul><li>"fight back" → high-aggression lexicon match</li><li>Report volume (847) → threshold exceeded → escalated flag</li><li>No speaker identity, context, or intent analysis performed</li></ul><strong>Critical Flaw:</strong> Applies literal keyword matching to metaphorical political speech. Cannot distinguish "fight back at the ballot box" from violent incitement.`
+        body: `<strong>Model:</strong> ThreatDetect v5.1 + Location-Target Classifier<br/><br/><strong>Process:</strong><ul><li>"show up" + location string → location-targeting flag triggered</li><li>"fight back," "pressure," "won't get away" → high-aggression cluster</li><li>Report volume (847) → threshold exceeded</li><li>No legal incitement standard applied; no protest vs threat distinction</li></ul><strong>Critical Flaw:</strong> Location-targeting classifier was trained on stalking/doxxing data — it cannot distinguish "protest at corporate HQ" from "show up at someone's home." This is a fundamental training data mismatch.`
       }
     },
     options: [
-      { label: "✅ REJECT FLAG — Protected Political Speech", style: "btn-approve", value: "reject_flag" },
-      { label: "❌ APPROVE REMOVAL — Incitement", style: "btn-reject", value: "approve_removal" },
-      { label: "⚠️ RESTRICT — Reduce reach, add context label", style: "btn-challenge", value: "restrict" }
+      { label: "✅ REJECT FLAG — Protected Protest Organising", style: "btn-approve", value: "reject_flag" },
+      { label: "❌ APPROVE REMOVAL — Incitement / Targeted Harassment", style: "btn-reject", value: "approve_removal" },
+      { label: "⚠️ RESTRICT — Add Context Label, Reduce Reach", style: "btn-challenge", value: "restrict" }
     ],
     correctAnswer: "reject_flag",
     partialAnswers: ["restrict"],
@@ -442,38 +470,44 @@ const SCENARIOS = [
       reject_flag: {
         correct: true,
         icon: "✅",
-        headline: "Correct — Speech Protected",
-        subline: "You stopped AI from silencing political activism",
-        ethicalScore: 96,
+        headline: "Best Justified Answer",
+        subline: "You recognised protest organising within protected speech norms",
+        ethicalScore: 90,
+        harmIfUp: "The call to physically protest at a named location remains live — but organising lawful protests at corporate premises is protected civic activity.",
+        harmIfRemoved: "A legitimate climate protest movement loses its recorded call-to-action; sets a precedent that naming a location in a speech triggers removal.",
         userDecisionLabel: "Rejected Flag — Video Kept",
         aiDecisionLabel: "Incitement Removal (Incorrect)",
-        analysis: `This speech meets none of the legal thresholds for incitement — no specific target, no immediate threat, no call to unlawful action. The coordinated report campaign was an attempt to weaponise the moderation system.`,
-        aiFailure: `ThreatDetect v5.1 cannot distinguish metaphorical "fight back" from literal violent incitement — creating systemic bias against passionate activist and protest speech.`,
-        principle: `Political speech protections are strongest when speech is most provocative — that is precisely when platforms face the greatest pressure to restrict it.`
+        analysis: `This is genuinely harder than it looks — naming a location adds specificity. But "show up every day until they hear us" is a call to peaceful protest, not unlawful action. No property damage, no assault, no threat to individuals is called for. The legal incitement standard requires a call to imminent illegal action — this does not meet it.`,
+        aiFailure: `ThreatDetect's location classifier was trained on stalking and doxxing data — it cannot distinguish "protest at corporate HQ" from "show up at someone's home." This training data mismatch produces predictable false positives against protest movements.`,
+        principle: `Physical protest at locations of public business activity is one of the oldest forms of protected expression. Specificity alone does not transform speech into incitement — the critical question is always: was any illegal action called for?`
       },
       approve_removal: {
         correct: false,
         icon: "❌",
-        headline: "Incorrect — Activism Silenced",
-        subline: "You let AI suppress legitimate political expression",
-        ethicalScore: 8,
+        headline: "Weakest Justification — Protest Silenced",
+        subline: "Location specificity doesn't convert protest into incitement",
+        ethicalScore: 12,
+        harmIfUp: "Speech remains — a call to lawful protest at a corporate address.",
+        harmIfRemoved: "Climate activism suppressed; precedent set that naming a business address in a speech justifies removal.",
         userDecisionLabel: "Approved Removal",
         aiDecisionLabel: "Approved Removal (Both Incorrect)",
-        analysis: `Anger and urgency are not incitement. Removing this speech silences a public activist and sets a precedent for removing any impassioned protest speech from the platform.`,
-        aiFailure: `Both ModAI and your decision conflated emotional intensity with incitement — a pattern that disproportionately silences protest movements and marginalised voices.`,
-        principle: `The incitement standard exists to allow passionate, even angry political speech. It only forbids direct calls to imminent illegal action against identifiable targets.`
+        analysis: `"Show up at their offices" is a picket line call — one of the most fundamental forms of democratic protest. No unlawful action was called for. Removing this speech confuses the specificity of protest organising with the specificity required for incitement.`,
+        aiFailure: `Both ModAI and your decision applied a standard that would prohibit virtually all organised protest. The incitement bar exists precisely to allow this kind of impassioned, location-specific speech.`,
+        principle: `Incitement requires a call to imminent illegal action. Lawful protest at a named address — however many people attend — is not that.`
       },
       restrict: {
         correct: false,
         icon: "⚠️",
-        headline: "Cautious but Unjustified",
-        subline: "Good instinct, but unnecessary restriction applied",
-        ethicalScore: 65,
+        headline: "Defensible Given the Ambiguity",
+        subline: "The location callout created real uncertainty — but restriction wasn't warranted",
+        ethicalScore: 68,
+        harmIfUp: "Reduced visibility limits both harm potential and the movement's ability to organise.",
+        harmIfRemoved: "Restriction dampens protest speech without clear justification — chills future organising.",
         userDecisionLabel: "Restricted Reach",
-        aiDecisionLabel: "Full Removal (More Restrictive)",
-        analysis: `Restricting reach shows caution, but this speech has no realistic harm potential and the report campaign was coordinated. Restriction still dampens political discourse without justification.`,
-        aiFailure: `ModAI's full removal was clearly worse, but the speech needed no intervention at all — restriction still treats legitimate protest as suspicious content.`,
-        principle: `Restricting speech requires proportionate justification. When a case does not meet the harm threshold, no action is the correct decision.`
+        aiDecisionLabel: "Full Removal (Overcorrection)",
+        analysis: `The location-specific call is the most defensible reason for caution here. But restriction requires proportionate justification — and calling people to protest at a corporate office falls within established protest rights. The Ethical Guidelines and the absence of any incitement to illegal action point toward no intervention.`,
+        aiFailure: `ModAI's full removal was clearly worse — but restriction still treats lawful protest organising as content requiring suppression, which sets a problematic precedent.`,
+        principle: `When genuinely uncertain, use the legal incitement standard as your anchor: was any illegal action called for? If not, the default should be protection, not restriction.`
       }
     }
   }
@@ -483,7 +517,7 @@ const BIASES = [
   { icon: "🔤", text: "<strong>Keyword Over-sensitivity:</strong> Political rhetoric ('corrupt', 'criminal') treated as offensive language — no understanding of rhetorical context or target type." },
   { icon: "📊", text: "<strong>Report-Volume Manipulation:</strong> Raw report count used as a hate speech signal — trivially exploitable by organised political groups to silence critics." },
   { icon: "📰", text: "<strong>Official-Source Bias:</strong> Disagreement with government data treated as misinformation — suppressing legitimate public scepticism." },
-  { icon: "🏢", text: "<strong>Corporate-Protective PII Blindness:</strong> Cannot distinguish self-disclosure from doxxing — systematically protects corporations from consumer complaints." },
+  { icon: "🏢", text: "<strong>Binary PII Blindness:</strong> Cannot distinguish self-disclosure from doxxing, assess viral harm, or perform partial redaction — forces all-or-nothing decisions on cases that require proportionate responses." },
   { icon: "🎙️", text: "<strong>Aggression-Lexicon Bias:</strong> Applies literal keyword matching to metaphorical political speech — cannot distinguish passionate activism from violent incitement." }
 ];
 
